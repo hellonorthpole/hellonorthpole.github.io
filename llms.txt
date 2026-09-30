@@ -1,0 +1,6 @@
+# Hello North Pole
+
+> North Pole Phone Line: a personalised phone call from Father Christmas for children in the UK. Parents book online, share their child's details, and Father Christmas rings at the chosen time (1-24 December) for about five minutes. £9.99 per child (£7.99 early-bird for the waitlist), 25% off siblings, Nice List Certificate included. Voice created with AI voice technology; not recorded unless the parent chooses.
+
+- [Home and waitlist](https://hellonorthpole.github.io/)
+- [Instagram](https://www.instagram.com/hello_northpole/)
