@@ -95,6 +95,10 @@ button{grid-column:1/-1;font:inherit;font-weight:700;font-size:17px;color:#020C2
   border:0;border-radius:1000px;padding:15px;cursor:pointer;box-shadow:0 12px 34px -10px rgba(250,182,0,.6)}
 button:hover{filter:brightness(1.06)}
 button:focus-visible{outline:2px solid var(--snow);outline-offset:3px}
+.consent{grid-column:1/-1;display:flex;gap:10px;align-items:flex-start;font-size:13.5px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--snow-dim)}
+.consent input{width:18px;height:18px;margin-top:3px;flex:none;accent-color:var(--gold)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+#wlerr{color:var(--gold-soft)}
 .fine{grid-column:1/-1;font-size:12.5px;color:var(--snow-faint);margin:0}
 .thanks{display:none;padding:18px;border-radius:14px;background:rgba(250,182,0,.12);border:1px solid var(--gold)}
 .thanks b{font-family:var(--script);font-size:34px;font-weight:400;color:var(--gold);display:block;line-height:1.1}
@@ -134,7 +138,7 @@ footer{border-top:1px solid var(--line);padding-block:26px 40px;color:var(--snow
 
 <canvas id="snow" aria-hidden="true"></canvas>
 <div class="wrap">
-  <div class="preview">Sneak peek! The waitlist opens very soon. Follow <a href="https://www.instagram.com/hello_northpole/" style="color:#020C24;font-weight:700">@hello_northpole</a> to hear first.</div>
+  <div class="preview">🎄 The waitlist is open! Early-bird families get first pick of call times.</div>
 
   <nav>
     <a class="brand" href="#top">Hello <span>North Pole</span></a>
@@ -214,10 +218,12 @@ footer{border-top:1px solid var(--line);padding-block:26px 40px;color:var(--snow
           <select id="kids" name="kids"><option>1</option><option>2</option><option>3</option><option>4 or more</option></select></div>
         <div class="field"><label for="lang">Language for the call</label>
           <select id="lang" name="lang"><option>English</option><option>Welsh</option><option>Polish</option><option>Urdu</option><option>Punjabi</option><option>Arabic</option><option>Spanish</option><option>Romanian</option><option>Another language</option></select></div>
-        <button type="submit">Save my place on the Nice List</button>
-        <p class="fine">We'll only email you about Hello North Pole. Unsubscribe any time.</p>
+        <label class="consent" for="consent"><input id="consent" name="consent" type="checkbox" required> Yes, email me about Hello North Pole, including when bookings open. I can unsubscribe any time.</label>
+        <input class="hp" type="text" name="website" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" id="wlbtn">Save my place on the Nice List</button>
+        <p class="fine" id="wlerr" role="alert"></p>
       </form>
-      <div class="thanks" id="thanks" role="status"><b>Almost there!</b>The waitlist opens very soon. Nothing has been saved yet, so follow <a href="https://www.instagram.com/hello_northpole/">@hello_northpole</a> on Instagram to be the first to know.</div>
+      <div class="thanks" id="thanks" role="status"><b>You're on the list!</b>Tinsel has written your name in the Switchboard book. We'll email you the moment bookings open, before anyone else.</div>
     </div>
   </section>
 
@@ -284,11 +290,20 @@ footer{border-top:1px solid var(--line);padding-block:26px 40px;color:var(--snow
 
 document.getElementById("wl").addEventListener("submit", function (e) {
   e.preventDefault();
-  var email = document.getElementById("email");
-  if (!email.value || email.value.indexOf("@") < 1) { email.focus(); email.setAttribute("aria-invalid", "true"); return; }
-  // Preview only: once live on hellonorthpole.co.uk this posts to the Brevo waitlist.
-  this.style.display = "none";
-  document.getElementById("thanks").style.display = "block";
+  var form = this, email = document.getElementById("email"), err = document.getElementById("wlerr"), btn = document.getElementById("wlbtn");
+  err.textContent = "";
+  if (!email.value || email.value.indexOf("@") < 1) { email.focus(); email.setAttribute("aria-invalid", "true"); err.textContent = "Please enter your email address."; return; }
+  if (!document.getElementById("consent").checked) { err.textContent = "Please tick the box so we can email you when bookings open."; return; }
+  btn.disabled = true; btn.textContent = "Saving your place…";
+  fetch("https://hnp-waitlist.teethingissues.workers.dev", { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: email.value, kids: document.getElementById("kids").value, lang: document.getElementById("lang").value,
+                           consent: true, website: document.getElementById("website").value }) })
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (d.ok) { form.style.display = "none"; document.getElementById("thanks").style.display = "block"; }
+      else { err.textContent = d.error || "Something went wrong. Please try again."; btn.disabled = false; btn.textContent = "Save my place on the Nice List"; }
+    })
+    .catch(function () { err.textContent = "We couldn't reach the North Pole just now. Please try again in a minute."; btn.disabled = false; btn.textContent = "Save my place on the Nice List"; });
 });
 </script>
 </body></html>
