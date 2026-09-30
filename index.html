@@ -1,0 +1,282 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta property="og:title" content="Hello North Pole"><meta property="og:description" content="This Christmas, the North Pole is calling. A personal phone call from Father Christmas."><meta property="og:image" content="img/hero.jpg"><style>html,body{margin:0}[hidden]{display:none!important}</style></head><body><title>Hello North Pole</title>
+<meta name="description" content="Deep in the snow, the North Pole Switchboard is buzzing. Father Christmas is making his calls. Join the waitlist for a personalised phone call for your child, Christmas 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Lato:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+/* Layout: an immersive Christmas-Eve story. Full-bleed photo hero with falling snow, the story told in
+   three chapters, magic tips for parents, the sign-up as "a call slot on the Switchboard". Single-theme: always night. */
+:root{
+  color-scheme: dark;
+  --night:#020C24;      /* midnight sky — page */
+  --night-2:#0F204B;    /* royal navy — panels */
+  --night-3:#16295A;    /* inputs */
+  --line:#2A3F73;
+  --snow:#FFFFFF;
+  --snow-dim:#D6DCEB;
+  --snow-faint:#9AA6C4;
+  --gold:#FAB600;       /* tree-light gold — accent */
+  --gold-soft:#F8D057;
+  --berry:#C8372D;      /* Father Christmas red — used sparingly */
+  --display:"Playfair Display", Georgia, "Times New Roman", serif;
+  --script:"Great Vibes", "Snell Roundhand", cursive;
+  --sans:"Lato", "Gill Sans", "Gill Sans MT", -apple-system, "Segoe UI", sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--night)}
+body{margin:0;background:radial-gradient(1200px 700px at 70% -10%, #13306E 0%, rgba(2,12,36,0) 60%), var(--night);background-attachment:fixed;
+  color:var(--snow);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;padding-inline:18px;padding-block:0}
+#snow{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:40}
+.wrap{max-width:1080px;margin-inline:auto;position:relative;z-index:1}
+a{color:var(--gold)}
+img{max-width:100%;display:block}
+.preview{margin-top:14px;font-size:12.5px;color:#020C24;background:var(--gold);border-radius:8px;padding:8px 12px;text-align:center}
+
+nav{display:flex;justify-content:space-between;align-items:center;padding-block:18px}
+.brand{font-family:var(--display);font-weight:600;font-size:22px;color:var(--snow);text-decoration:none}
+.brand span{color:var(--gold)}
+.navr{display:flex;gap:16px;align-items:center}
+.ig{font-size:13.5px;color:var(--snow-dim);text-decoration:none}
+.ig:hover{color:var(--gold)}
+.pillbtn{font-weight:700;font-size:14px;color:#020C24;background:linear-gradient(180deg,var(--gold-soft),var(--gold));padding:9px 18px;border-radius:1000px;text-decoration:none}
+
+/* hero: the photo IS the page's first moment */
+.hero{position:relative;border-radius:22px;overflow:hidden;min-height:clamp(520px,78vh,760px);display:flex;align-items:flex-end;
+  box-shadow:0 40px 90px -40px rgba(0,0,0,.9)}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,12,36,.05) 30%,rgba(2,12,36,.55) 62%,rgba(2,12,36,.96) 100%)}
+.hero-inner{position:relative;z-index:1;padding:clamp(22px,5vw,54px);max-width:760px}
+.kicker{font-family:var(--script);font-size:clamp(30px,4.5vw,44px);color:var(--gold);line-height:1}
+.hero h1{font-family:var(--display);font-weight:500;font-size:clamp(40px,6.4vw,76px);line-height:1;margin:6px 0 0;text-wrap:balance;text-shadow:0 2px 24px rgba(0,0,0,.5)}
+.hero p{margin:16px 0 0;font-size:clamp(17px,1.8vw,20px);color:var(--snow-dim);max-width:44ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:24px}
+.big-btn{display:inline-block;font-weight:700;font-size:17px;color:#020C24;background:linear-gradient(180deg,var(--gold-soft),var(--gold));
+  padding:15px 30px;border-radius:1000px;text-decoration:none;box-shadow:0 12px 34px -10px rgba(250,182,0,.6)}
+.big-btn:hover{filter:brightness(1.06)}
+.big-btn:focus-visible,.pillbtn:focus-visible{outline:2px solid var(--snow);outline-offset:3px}
+.sleeps{font-size:14px;color:var(--snow-dim)}
+.sleeps b{font-family:var(--display);font-size:24px;color:var(--snow);font-weight:600;font-variant-numeric:tabular-nums}
+
+/* story chapters */
+.intro{text-align:center;padding-block:clamp(50px,8vw,96px) 10px}
+.intro .kicker{font-size:clamp(28px,4vw,40px)}
+.intro h2{font-family:var(--display);font-weight:500;font-size:clamp(32px,4.6vw,52px);line-height:1.08;margin:6px auto 0;max-width:18ch;text-wrap:balance}
+.intro p{margin:18px auto 0;max-width:58ch;color:var(--snow-dim);font-size:18px}
+
+.chapter{display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,5vw,64px);align-items:center;padding-block:clamp(40px,7vw,80px);border-bottom:1px solid var(--line)}
+.chapter:nth-of-type(even) .ch-photo{order:2}
+.ch-photo{border-radius:18px;overflow:hidden;box-shadow:0 30px 70px -30px rgba(0,0,0,.85)}
+.ch-photo img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.ch-num{font-size:12px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+.chapter h3{font-family:var(--display);font-weight:500;font-size:clamp(30px,3.8vw,44px);line-height:1.08;margin:10px 0 0;text-wrap:balance}
+.chapter p{color:var(--snow-dim);margin:14px 0 0;max-width:52ch}
+.tip{margin-top:18px;padding:14px 16px;border-radius:14px;background:rgba(250,182,0,.1);border:1px solid rgba(250,182,0,.45);font-size:15px;color:var(--snow)}
+.tip b{color:var(--gold);font-weight:700;letter-spacing:.04em}
+.quote{margin:18px 0 0;font-family:var(--display);font-style:italic;font-size:21px;color:var(--snow);padding-left:16px;border-left:2px solid var(--berry)}
+.quote small{display:block;font-family:var(--sans);font-style:normal;font-size:13px;color:var(--snow-faint);margin-top:6px}
+
+/* the sign-up: reserving a line on the Switchboard */
+.book{margin-block:clamp(50px,8vw,90px);display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(22px,4vw,48px);align-items:center;
+  background:linear-gradient(160deg,#13306E,var(--night-2) 55%);border:1px solid var(--line);border-radius:24px;padding:clamp(22px,4vw,44px)}
+.book h2{font-family:var(--display);font-weight:500;font-size:clamp(30px,4vw,44px);line-height:1.08;margin:6px 0 0;text-wrap:balance}
+.book .lead{color:var(--snow-dim);margin:14px 0 0}
+.price{display:flex;align-items:baseline;gap:12px;margin-top:18px}
+.price .now{font-family:var(--display);font-size:46px;line-height:1;font-weight:600}
+.price .was{color:var(--snow-faint);text-decoration:line-through;font-size:20px}
+.price .per{color:var(--snow-dim);font-size:14px}
+.small{font-size:14px;color:var(--snow-dim);margin:8px 0 0}
+form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field.full{grid-column:1/-1}
+label{font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--snow-dim)}
+input,select{font:inherit;font-size:16px;color:var(--snow);background:var(--night-3);border:1px solid var(--line);border-radius:12px;padding:12px;width:100%}
+input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:var(--gold)}
+button{grid-column:1/-1;font:inherit;font-weight:700;font-size:17px;color:#020C24;background:linear-gradient(180deg,var(--gold-soft),var(--gold));
+  border:0;border-radius:1000px;padding:15px;cursor:pointer;box-shadow:0 12px 34px -10px rgba(250,182,0,.6)}
+button:hover{filter:brightness(1.06)}
+button:focus-visible{outline:2px solid var(--snow);outline-offset:3px}
+.fine{grid-column:1/-1;font-size:12.5px;color:var(--snow-faint);margin:0}
+.thanks{display:none;padding:18px;border-radius:14px;background:rgba(250,182,0,.12);border:1px solid var(--gold)}
+.thanks b{font-family:var(--script);font-size:34px;font-weight:400;color:var(--gold);display:block;line-height:1.1}
+
+.promise{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;list-style:none;padding:0;margin:22px 0 0}
+.promise li{padding:16px 18px;border-radius:14px;background:var(--night-2);border:1px solid var(--line)}
+.promise b{display:block;font-family:var(--display);font-weight:500;font-size:19px;color:var(--gold)}
+.promise span{font-size:15px;color:var(--snow-dim)}
+.sec-h{font-family:var(--display);font-weight:500;font-size:clamp(28px,3.6vw,40px);margin:4px 0 0}
+.grownups{padding-block:clamp(36px,6vw,70px);border-top:1px solid var(--line)}
+
+details{border-bottom:1px solid var(--line);padding:16px 0}
+details:first-of-type{margin-top:18px;border-top:1px solid var(--line)}
+summary{cursor:pointer;font-family:var(--display);font-size:20px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--gold);font-family:var(--sans)}
+details[open] summary::after{content:"–"}
+summary:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+details p{margin:10px 0 0;color:var(--snow-dim);max-width:66ch}
+
+.finale{text-align:center;padding-block:clamp(50px,8vw,90px)}
+.finale h2{font-family:var(--display);font-weight:500;font-size:clamp(32px,4.6vw,52px);line-height:1.08;margin:6px auto 22px;max-width:16ch;text-wrap:balance}
+footer{border-top:1px solid var(--line);padding-block:26px 40px;color:var(--snow-faint);font-size:13px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+
+@media (max-width:820px){
+  .chapter,.book{grid-template-columns:1fr}
+  .chapter .ch-photo,.chapter:nth-of-type(even) .ch-photo{order:-1}
+  .navr .ig{display:none}
+}
+@media (max-width:520px){ form{grid-template-columns:1fr} }
+@media (prefers-reduced-motion:reduce){ #snow{display:none} *{transition:none!important} }
+</style>
+
+<canvas id="snow" aria-hidden="true"></canvas>
+<div class="wrap">
+  <div class="preview">Sneak peek! The waitlist opens very soon. Follow <a href="https://www.instagram.com/hello_northpole/" style="color:#020C24;font-weight:700">@hello_northpole</a> to hear first.</div>
+
+  <nav>
+    <a class="brand" href="#top">Hello <span>North Pole</span></a>
+    <div class="navr">
+      <a class="ig" href="https://www.instagram.com/hello_northpole/" target="_blank" rel="noopener">@hello_northpole</a>
+      <a class="pillbtn" href="#book">Join the waitlist</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <img src="img/hero.jpg" alt="A little girl in Christmas pyjamas sits by the glowing tree holding an old telephone to her ear, beaming with wonder.">
+    <div class="hero-inner">
+      <div class="kicker">Ring ring…</div>
+      <h1>This Christmas, the North Pole is calling</h1>
+      <p>A personal phone call from Father Christmas. He knows their name, how they've been this year, and what's on their list. And they get to talk back.</p>
+      <div class="hero-cta">
+        <a class="big-btn" href="#book">Reserve their call</a>
+        <span class="sleeps"><b id="sleeps">—</b> sleeps until Christmas</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="intro">
+    <div class="kicker">Deep in the snow…</div>
+    <h2>The North Pole Switchboard is buzzing</h2>
+    <p>Every December, Father Christmas takes a little time away from the Toy Factory to ring the children on his Nice List. Tinsel, the elf who runs the Switchboard, has already started putting through the calls, and there's a line waiting for your little one.</p>
+  </div>
+
+  <section class="chapter">
+    <div class="ch-photo"><img src="img/santa.jpg" alt="Father Christmas in his red robes, reading a child's letter beside the fire."></div>
+    <div>
+      <div class="ch-num">Chapter one</div>
+      <h3>The Secret Booking</h3>
+      <p>You quietly tell Tinsel all about them: their name and how to say it, their age, what they've been proud of this year, and one gentle nudge for Father Christmas to mention. Then you choose the evening the phone should ring.</p>
+      <div class="tip"><b>Parent magic tip:</b> In the days before, drop a hint. "Someone from the North Pole phoned asking for you while you were at school…"</div>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="ch-photo"><img src="img/phone.jpg" alt="A red rotary telephone beside a mug of hot chocolate and fairy lights."></div>
+    <div>
+      <div class="ch-num">Chapter two</div>
+      <h3>The Phone Rings</h3>
+      <p>At the time you chose, your phone rings. It's the North Pole. Father Christmas greets your child by name, tells them how proud he is, has a proper chat, and asks what they're hoping for. About five minutes of pure magic.</p>
+      <p class="quote">"Now, I hear a certain someone has been <i>ever</i> so kind to their little brother…"<small>An example of what Father Christmas might say</small></p>
+      <div class="tip"><b>Parent magic tip:</b> Put it on speaker by the tree, dim the big light, and have your camera ready. You'll want to keep their face forever.</div>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="ch-photo"><img src="img/hero.jpg" alt="The little girl on the phone, smiling."></div>
+    <div>
+      <div class="ch-num">Chapter three</div>
+      <h3>Christmas Morning</h3>
+      <p>After the call, a Nice List Certificate arrives, signed by Father Christmas himself and made out to your child. Proof, in black and gold, that they're on the list this year.</p>
+      <div class="tip"><b>Parent magic tip:</b> Print it and hide it in their stocking, so it's the first thing they find on Christmas morning.</div>
+    </div>
+  </section>
+
+  <section class="book" id="book">
+    <div>
+      <div class="kicker">Reserve a line</div>
+      <h2>Put your little one on the Switchboard</h2>
+      <p class="lead">Calls run from 1 to 24 December. Waitlist families get first pick of call times and the early-bird price.</p>
+      <div class="price"><span class="now">£7.99</span><span class="was">£9.99</span><span class="per">per child, early-bird</span></div>
+      <p class="small">Brothers and sisters get 25% off each extra call.</p>
+    </div>
+    <div>
+      <form id="wl" novalidate>
+        <div class="field full"><label for="email">Your email</label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></div>
+        <div class="field"><label for="kids">How many children?</label>
+          <select id="kids" name="kids"><option>1</option><option>2</option><option>3</option><option>4 or more</option></select></div>
+        <div class="field"><label for="lang">Language for the call</label>
+          <select id="lang" name="lang"><option>English</option><option>Welsh</option><option>Polish</option><option>Urdu</option><option>Punjabi</option><option>Arabic</option><option>Spanish</option><option>Romanian</option><option>Another language</option></select></div>
+        <button type="submit">Save my place on the Nice List</button>
+        <p class="fine">We'll only email you about Hello North Pole. Unsubscribe any time.</p>
+      </form>
+      <div class="thanks" id="thanks" role="status"><b>Almost there!</b>The waitlist opens very soon. Nothing has been saved yet, so follow <a href="https://www.instagram.com/hello_northpole/">@hello_northpole</a> on Instagram to be the first to know.</div>
+    </div>
+  </section>
+
+  <section class="grownups">
+    <div class="ch-num">Just for grown-ups</div>
+    <h2 class="sec-h">Made with parents in mind</h2>
+    <ul class="promise">
+      <li><b>You're in charge</b><span>You book, you pay, and the call comes to your phone at the time you choose.</span></li>
+      <li><b>No awkward promises</b><span>Father Christmas never promises a specific present, so Christmas morning stays safe.</span></li>
+      <li><b>Private by default</b><span>Calls aren't recorded unless you choose a keepsake recording, and we delete your child's details after Christmas.</span></li>
+      <li><b>Short and sweet</b><span>About five minutes, then a warm goodbye. Perfect for little ones.</span></li>
+    </ul>
+    <details><summary>Is it really Father Christmas?</summary><p>For your little one, it's a real conversation with Father Christmas. For you: his voice is brought to life with carefully designed AI voice technology, guided by everything you tell us about your child, so every call is completely personal.</p></details>
+    <details><summary>What phone does it call?</summary><p>Any UK mobile or landline. Put it on speaker so the whole family can listen in.</p></details>
+    <details><summary>Can Father Christmas speak other languages?</summary><p>Yes. Choose a language when you join the waitlist and we'll let you know when it's ready.</p></details>
+    <details><summary>What if my child is shy?</summary><p>That's completely fine. Father Christmas is patient and gentle, does most of the talking, and it's still magical if they only manage a whisper.</p></details>
+  </section>
+
+  <section class="finale">
+    <div class="kicker">One day, they'll remember this</div>
+    <h2>Give them the Christmas you remember</h2>
+    <a class="big-btn" href="#book">Reserve their call</a>
+  </section>
+
+  <footer>
+    <span>Hello North Pole. Christmas magic, just like when we were kids.</span>
+    <a class="ig" href="https://www.instagram.com/hello_northpole/" target="_blank" rel="noopener">Instagram @hello_northpole</a>
+  </footer>
+</div>
+
+<script>
+// sleeps until Christmas (counts nights until 25 December, UK time)
+(function () {
+  var now = new Date(), y = now.getFullYear();
+  var xmas = new Date(y, 11, 25);
+  if (now > xmas) xmas = new Date(y + 1, 11, 25);
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  document.getElementById("sleeps").textContent = Math.round((xmas - today) / 86400000);
+})();
+
+// gentle falling snow
+(function () {
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  var c = document.getElementById("snow"), x = c.getContext("2d"), flakes = [], W, H;
+  function size() { W = c.width = innerWidth; H = c.height = innerHeight; }
+  size(); addEventListener("resize", size);
+  var n = Math.min(110, Math.round(innerWidth / 12));
+  for (var i = 0; i < n; i++) flakes.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 2.2 + .6, s: Math.random() * .6 + .25, d: Math.random() * 6.28 });
+  (function tick() {
+    x.clearRect(0, 0, W, H);
+    x.fillStyle = "rgba(255,255,255,.85)";
+    for (var i = 0; i < flakes.length; i++) {
+      var f = flakes[i];
+      f.y += f.s; f.d += .01; f.x += Math.sin(f.d) * .35;
+      if (f.y > H + 4) { f.y = -4; f.x = Math.random() * W; }
+      x.beginPath(); x.arc(f.x, f.y, f.r, 0, 6.283); x.fill();
+    }
+    requestAnimationFrame(tick);
+  })();
+})();
+
+document.getElementById("wl").addEventListener("submit", function (e) {
+  e.preventDefault();
+  var email = document.getElementById("email");
+  if (!email.value || email.value.indexOf("@") < 1) { email.focus(); email.setAttribute("aria-invalid", "true"); return; }
+  // Sneak-peek version: nothing is collected yet (the Brevo waitlist is wired in once the domain is live).
+  this.style.display = "none";
+  document.getElementById("thanks").style.display = "block";
+});
+</script>
+</body></html>
