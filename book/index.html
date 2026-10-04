@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book Your Call | Hello North Pole</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Booking page (4 Oct 2026): parents land here after paying, choose a day + time (1–24 Dec) and tell Father Christmas about their child. */
+:root{color-scheme:dark;--night:#020C24;--night-2:#0F204B;--night-3:#16295A;--line:#2A3F73;--snow:#FFFFFF;--snow-dim:#D6DCEB;--snow-faint:#9AA6C4;
+  --gold:#FAB600;--gold-soft:#F8D057;--berry:#C8372D;--display:"Playfair Display",Georgia,serif;--sans:"Lato",-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+html{background:var(--night)}
+body{margin:0;background:radial-gradient(1200px 700px at 70% -10%,#13306E 0%,rgba(2,12,36,0) 60%),var(--night);color:var(--snow);font-family:var(--sans);
+  font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;padding:0 16px 60px}
+.wrap{max-width:760px;margin:0 auto}
+a{color:var(--gold)}
+nav{padding:18px 0}
+.brand{font-family:var(--display);font-weight:600;font-size:22px;color:var(--snow);text-decoration:none}
+.brand span{color:var(--gold)}
+.kicker{font-family:var(--display);font-style:italic;font-weight:500;font-size:24px;color:var(--gold);line-height:1}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(32px,6vw,48px);line-height:1.05;margin:8px 0 10px}
+.lead{color:var(--snow-dim);margin:0 0 26px}
+.card{background:var(--night-2);border:1px solid var(--line);border-radius:18px;padding:clamp(18px,4vw,30px);margin-bottom:18px}
+.card h2{font-family:var(--display);font-weight:500;font-size:24px;margin:0 0 4px}
+.card .hint{color:var(--snow-faint);font-size:14px;margin:0 0 16px}
+.step{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+label{display:block;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--snow-dim);margin:0 0 6px}
+label .opt{text-transform:none;letter-spacing:0;font-weight:400;color:var(--snow-faint)}
+input,select,textarea{width:100%;font:inherit;font-size:16px;color:var(--snow);background:var(--night-3);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+textarea{min-height:84px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:var(--gold)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.full{grid-column:1/-1}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+/* calendar */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.dow{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--snow-faint);text-align:center;padding-bottom:2px}
+.day{appearance:none;border:1px solid var(--line);background:var(--night-3);color:var(--snow);border-radius:10px;padding:10px 0;font:inherit;font-weight:700;cursor:pointer;text-align:center}
+.day small{display:block;font-weight:400;font-size:10.5px;color:var(--snow-faint)}
+.day:hover{border-color:var(--gold)}
+.day[aria-pressed="true"]{background:var(--gold);color:#020C24;border-color:var(--gold)}
+.day[aria-pressed="true"] small{color:#020C24}
+.day.eve{border-color:var(--berry)}
+.blank{visibility:hidden}
+.times{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.time{appearance:none;border:1px solid var(--line);background:var(--night-3);color:var(--snow);border-radius:999px;padding:8px 14px;font:inherit;font-size:15px;cursor:pointer}
+.time:hover{border-color:var(--gold)}
+.time[aria-pressed="true"]{background:var(--gold);color:#020C24;border-color:var(--gold);font-weight:700}
+.time:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
+.picked{margin-top:14px;font-weight:700;color:var(--gold-soft)}
+.consent{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--snow-dim);text-transform:none;letter-spacing:0;font-weight:400}
+.consent input{width:20px;height:20px;margin-top:3px;flex:none;accent-color:var(--gold)}
+.hp{position:absolute;left:-9999px}
+.go{display:block;width:100%;font:inherit;font-weight:700;font-size:18px;color:#020C24;background:linear-gradient(180deg,var(--gold-soft),var(--gold));
+  border:0;border-radius:999px;padding:16px;cursor:pointer;box-shadow:0 12px 34px -10px rgba(250,182,0,.6)}
+.go:disabled{opacity:.6;cursor:wait}
+.err{color:var(--gold-soft);font-weight:700;min-height:1.4em;margin:12px 0 0}
+.done{display:none;text-align:center}
+.done .big{font-family:var(--display);font-size:clamp(30px,6vw,44px);line-height:1.1;margin:6px 0 10px}
+.btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:20px}
+.btn{display:inline-block;font-weight:700;font-size:16px;text-decoration:none;border-radius:999px;padding:13px 22px}
+.btn.gold{color:#020C24;background:linear-gradient(180deg,var(--gold-soft),var(--gold))}
+.btn.line{color:var(--snow);border:1.5px solid var(--gold)}
+.small{font-size:14px;color:var(--snow-faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav><a class="brand" href="/">Hello <span>North Pole</span></a></nav>
+
+  <div id="form-wrap">
+    <div class="kicker">Thank you!</div>
+    <h1>Now, let's book Father Christmas's call</h1>
+    <p class="lead">Choose when he should ring, and tell him a little about your child. It takes about two minutes. Everything here stays between you and the North Pole, and we delete it after Christmas.</p>
+
+    <form id="bk" novalidate>
+      <div class="card">
+        <div class="step">Step 1</div>
+        <h2>When should he ring?</h2>
+        <p class="hint">Calls run from 1 to 24 December. Weekday calls are in the evening, after school. All times are UK time.</p>
+        <div class="cal" id="cal" role="group" aria-label="Choose a day in December"></div>
+        <div class="times" id="times" role="group" aria-label="Choose a time"></div>
+        <p class="picked" id="picked" aria-live="polite"></p>
+      </div>
+
+      <div class="card">
+        <div class="step">Step 2</div>
+        <h2>About your little one</h2>
+        <p class="hint">Father Christmas will use these to make the call all about them.</p>
+        <div class="grid">
+          <div><label for="child_name">Child's first name *</label><input id="child_name" autocomplete="off" required></div>
+          <div><label for="age">Age *</label><select id="age" required><option value="">Choose…</option></select></div>
+          <div class="full"><label for="pronounce">How do you say their name? <span class="opt">(optional, e.g. "MIL-ee")</span></label><input id="pronounce" autocomplete="off"></div>
+          <div class="full"><label for="proud">One or two things they've done this year that you're proud of *</label>
+            <textarea id="proud" placeholder="e.g. Started big school and made a new best friend. Learned to swim without armbands." required></textarea></div>
+          <div class="full"><label for="wishes">What's on their Christmas list? *</label>
+            <textarea id="wishes" placeholder="e.g. A dolls house and a red bike. (Father Christmas never promises a present.)" required></textarea></div>
+          <div class="full"><label for="nudge">A gentle nudge? <span class="opt">(optional: something he could kindly encourage)</span></label>
+            <input id="nudge" placeholder="e.g. Being kind to her little brother"></div>
+          <div class="full"><label for="avoid">Anything he should avoid? <span class="opt">(optional)</span></label>
+            <input id="avoid" placeholder="e.g. Please don't mention our dog, he passed away this year"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="step">Step 3</div>
+        <h2>Where should he ring?</h2>
+        <p class="hint">He'll ring this number at the time you chose. A grown-up answers first, then passes the phone over.</p>
+        <div class="grid">
+          <div><label for="parent_name">Your first name *</label><input id="parent_name" autocomplete="given-name" required></div>
+          <div><label for="phone">Phone number for the call *</label><input id="phone" type="tel" autocomplete="tel" placeholder="07…" required></div>
+          <div class="full"><label for="email">Your email *</label><input id="email" type="email" autocomplete="email" required></div>
+        </div>
+        <input class="hp" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <p style="margin:18px 0 0"><label class="consent" for="consent"><input type="checkbox" id="consent"> I'm this child's parent or guardian. Hello North Pole can use these details to make the call, and will delete them after Christmas.</label></p>
+      </div>
+
+      <button class="go" id="go" type="submit">Book the call</button>
+      <p class="err" id="err" role="alert"></p>
+    </form>
+  </div>
+
+  <div class="done card" id="done" role="status">
+    <div class="kicker">It's in the Switchboard book!</div>
+    <p class="big" id="done-line"></p>
+    <p class="lead" style="margin:0">Tinsel the elf has written it down. Two little things so it goes perfectly:</p>
+    <p class="lead" style="margin:14px 0 0"><b>1. Save his number</b> so your phone lets him straight through (some phones hide calls from new numbers).<br><b>2. Pop it in your calendar</b> and keep it a surprise!</p>
+    <div class="btns">
+      <a class="btn gold" href="/north-pole.vcf">Save Father Christmas's number</a>
+      <a class="btn line" id="ics" href="#" download="father-christmas-call.ics">Add to my calendar</a>
+    </div>
+    <p class="small" style="margin-top:18px">He rings from 020 3911 9303. Questions? Just reply to your booking email.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var API = "https://hnp-booking.teethingissues.workers.dev";
+  var DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], full = {}, day = null, slot = null;
+  var session = new URLSearchParams(location.search).get("session_id") || "";
+  var age = document.getElementById("age");
+  for (var a = 2; a <= 12; a++) { var o = document.createElement("option"); o.textContent = a; age.appendChild(o); }
+
+  function slotsFor(d) {
+    var dow = new Date(Date.UTC(2026, 11, d)).getUTCDay(), weekend = dow === 0 || dow === 6 || d === 24, out = [];
+    for (var m = (weekend ? 9 : 16) * 60; m <= 19 * 60 + 45; m += 15) {
+      var hh = String(Math.floor(m / 60)).padStart(2, "0"), mm = String(m % 60).padStart(2, "0");
+      out.push({ id: "2026-12-" + String(d).padStart(2, "0") + "T" + hh + ":" + mm, label: (m / 60 > 12 ? Math.floor(m / 60) - 12 : Math.floor(m / 60)) + ":" + mm + (m >= 720 ? "pm" : "am") });
+    }
+    return out;
+  }
+  function nice(d) { return new Date(Date.UTC(2026, 11, d)).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }); }
+
+  var cal = document.getElementById("cal");
+  ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].forEach(function (n) { var e = document.createElement("div"); e.className = "dow"; e.textContent = n; cal.appendChild(e); });
+  var lead = (new Date(Date.UTC(2026, 11, 1)).getUTCDay() + 6) % 7;
+  for (var i = 0; i < lead; i++) { var b = document.createElement("div"); b.className = "blank"; cal.appendChild(b); }
+  for (var d = 1; d <= 24; d++) (function (d) {
+    var btn = document.createElement("button"); btn.type = "button"; btn.className = "day" + (d === 24 ? " eve" : "");
+    btn.setAttribute("aria-pressed", "false"); btn.setAttribute("aria-label", nice(d));
+    btn.innerHTML = d + "<small>" + (d === 24 ? "Xmas Eve" : DOW[new Date(Date.UTC(2026, 11, d)).getUTCDay()]) + "</small>";
+    btn.onclick = function () { day = d; slot = null; [].forEach.call(cal.querySelectorAll(".day"), function (x) { x.setAttribute("aria-pressed", x === btn ? "true" : "false"); }); drawTimes(); };
+    cal.appendChild(btn);
+  })(d);
+
+  function drawTimes() {
+    var t = document.getElementById("times"); t.innerHTML = "";
+    slotsFor(day).forEach(function (s) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "time"; b.textContent = s.label; b.setAttribute("aria-pressed", "false");
+      if (full[s.id]) { b.disabled = true; b.title = "Fully booked"; }
+      b.onclick = function () { slot = s.id; [].forEach.call(t.querySelectorAll(".time"), function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+        document.getElementById("picked").textContent = "Father Christmas will ring on " + nice(day) + " at " + s.label + "."; };
+      t.appendChild(b);
+    });
+    document.getElementById("picked").textContent = "";
+  }
+  fetch(API + "/slots").then(function (r) { return r.json(); }).then(function (d) { (d.full || []).forEach(function (k) { full[k] = 1; }); if (day) drawTimes(); }).catch(function () {});
+
+  function v(id) { return document.getElementById(id).value.trim(); }
+  document.getElementById("bk").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var err = document.getElementById("err"), go = document.getElementById("go"); err.textContent = "";
+    if (!slot) { err.textContent = "Please choose a day and a time in Step 1."; document.getElementById("cal").scrollIntoView({ behavior: "smooth", block: "center" }); return; }
+    var body = { slot: slot, child_name: v("child_name"), age: v("age"), pronounce: v("pronounce"), proud: v("proud"), wishes: v("wishes"), nudge: v("nudge"), avoid: v("avoid"),
+                 parent_name: v("parent_name"), phone: v("phone"), email: v("email"), consent: document.getElementById("consent").checked, website: v("website"), session_id: session };
+    go.disabled = true; go.textContent = "Sending it to the North Pole…";
+    fetch(API + "/book", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok) { err.textContent = d.error || "Something went wrong. Please try again."; go.disabled = false; go.textContent = "Book the call"; return; }
+        var s = slotsFor(day).filter(function (x) { return x.id === slot; })[0];
+        document.getElementById("done-line").textContent = "Father Christmas will ring " + body.child_name + " on " + nice(day) + " at " + s.label + ".";
+        var start = slot.replace(/[-:]/g, "") + "00", endM = new Date(Date.UTC(2026, 11, day, +slot.slice(11, 13), +slot.slice(14, 16) + 10));
+        var end = endM.toISOString().replace(/[-:]/g, "").slice(0, 15);
+        var ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Hello North Pole//EN", "BEGIN:VEVENT", "UID:" + d.id + "@hellonorthpole.co.uk",
+          "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z", "DTSTART;TZID=Europe/London:" + start, "DTEND;TZID=Europe/London:" + end,
+          "SUMMARY:Father Christmas rings " + body.child_name + " 🎅", "DESCRIPTION:Keep your phone nearby! He rings from 020 3911 9303.",
+          "BEGIN:VALARM", "TRIGGER:-PT15M", "ACTION:DISPLAY", "DESCRIPTION:Father Christmas rings in 15 minutes", "END:VALARM", "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+        document.getElementById("ics").href = "data:text/calendar;charset=utf-8," + encodeURIComponent(ics);
+        document.getElementById("form-wrap").style.display = "none"; document.getElementById("done").style.display = "block"; window.scrollTo(0, 0);
+      })
+      .catch(function () { err.textContent = "We couldn't reach the North Pole. Please check your connection and try again."; go.disabled = false; go.textContent = "Book the call"; });
+  });
+})();
+</script>
+</body>
+</html>
