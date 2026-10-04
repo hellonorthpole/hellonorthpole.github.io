@@ -55,6 +55,11 @@ nav{display:flex;justify-content:space-between;align-items:center;padding-block:
 .big-btn:hover{filter:brightness(1.06)}
 .big-btn:focus-visible,.pillbtn:focus-visible{outline:2px solid var(--snow);outline-offset:3px}
 .sleeps{font-size:14px;color:var(--snow-dim)}
+.hear-btn{display:inline-flex;align-items:center;gap:10px;font:inherit;font-weight:700;font-size:16px;color:var(--snow);background:rgba(2,12,36,.55);
+  border:1.5px solid var(--gold);padding:13px 22px;border-radius:1000px;cursor:pointer;backdrop-filter:blur(4px);grid-column:auto;box-shadow:none}
+.hear-btn:hover{background:rgba(250,182,0,.16)}
+.hear-btn:focus-visible{outline:2px solid var(--snow);outline-offset:3px}
+.hear-btn .ico{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--gold);color:#020C24;font-size:12px}
 .sleeps b{font-family:var(--display);font-size:24px;color:var(--snow);font-weight:600;font-variant-numeric:tabular-nums}
 
 /* story chapters */
@@ -156,6 +161,8 @@ footer{border-top:1px solid var(--line);padding-block:26px 40px;color:var(--snow
       <p>A personal phone call from Father Christmas. He knows their name, how they've been this year, and what's on their list. And they get to talk back.</p>
       <div class="hero-cta">
         <a class="big-btn" href="#book">Reserve their call</a>
+        <button type="button" class="hear-btn" id="hear" aria-label="Play a 26-second sample of Father Christmas's voice"><span class="ico" aria-hidden="true">▶</span><span id="hear-txt">Hear Father Christmas</span></button>
+        <audio id="hear-audio" src="audio/father-christmas-demo.mp3" preload="none"></audio>
         <span class="sleeps"><b id="sleeps">—</b> sleeps until Christmas</span>
       </div>
     </div>
@@ -304,6 +311,14 @@ document.getElementById("wl").addEventListener("submit", function (e) {
       else { err.textContent = d.error || "Something went wrong. Please try again."; btn.disabled = false; btn.textContent = "Save my place on the Nice List"; }
     })
     .catch(function () { err.textContent = "We couldn't reach the North Pole just now. Please try again in a minute."; btn.disabled = false; btn.textContent = "Save my place on the Nice List"; });
+});
+</script>
+<script>
+document.getElementById("hear").addEventListener("click", function () {
+  var a = document.getElementById("hear-audio"), ico = this.querySelector(".ico"), txt = document.getElementById("hear-txt");
+  if (a.paused) { a.play(); ico.textContent = "❚❚"; txt.textContent = "Father Christmas is speaking…"; }
+  else { a.pause(); ico.textContent = "▶"; txt.textContent = "Hear Father Christmas"; }
+  a.onended = function () { ico.textContent = "▶"; txt.textContent = "Hear him again"; };
 });
 </script>
 </body></html>
