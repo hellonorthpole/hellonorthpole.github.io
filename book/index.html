@@ -112,6 +112,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
         <p class="hint">He'll ring this number at the time you chose. A grown-up answers first, then passes the phone over.</p>
         <div class="grid">
           <div><label for="parent_name">Your first name *</label><input id="parent_name" autocomplete="given-name" required></div>
+          <div><label for="grownup_title">What does your child call you? *</label><input id="grownup_title" placeholder="e.g. Mummy, Daddy, Nanny, Auntie Jo" required></div>
           <div><label for="phone">Phone number for the call *</label><input id="phone" type="tel" autocomplete="tel" placeholder="07…" required></div>
           <div class="full"><label for="email">Your email *</label><input id="email" type="email" autocomplete="email" required></div>
         </div>
@@ -186,7 +187,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
     var err = document.getElementById("err"), go = document.getElementById("go"); err.textContent = "";
     if (!slot) { err.textContent = "Please choose a day and a time in Step 1."; document.getElementById("cal").scrollIntoView({ behavior: "smooth", block: "center" }); return; }
     var body = { slot: slot, child_name: v("child_name"), age: v("age"), pronounce: v("pronounce"), proud: v("proud"), wishes: v("wishes"), nudge: v("nudge"), avoid: v("avoid"),
-                 parent_name: v("parent_name"), phone: v("phone"), email: v("email"), consent: document.getElementById("consent").checked, website: v("website"), session_id: session };
+                 parent_name: v("parent_name"), grownup_title: v("grownup_title"), phone: v("phone"), email: v("email"), consent: document.getElementById("consent").checked, website: v("website"), session_id: session };
     go.disabled = true; go.textContent = "Sending it to the North Pole…";
     fetch(API + "/book", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
       .then(function (r) { return r.json(); })
