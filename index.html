@@ -141,8 +141,8 @@ footer{border-top:1px solid var(--line);padding-block:26px 40px;color:var(--snow
 }
 @media (max-width:520px){ form{grid-template-columns:1fr} }
 @media (prefers-reduced-motion:reduce){ #snow{display:none} *{transition:none!important} }
-.wl-link{display:block;width:100%;margin-top:10px;color:var(--snow-dim);font-size:15px;text-decoration:underline;text-underline-offset:3px}
-.wl-link:hover{color:var(--gold)}
+.wl-link{display:inline-block;margin-top:12px;padding:12px 20px;border:1.5px solid var(--gold);border-radius:999px;color:var(--gold);font-size:16px;font-weight:600;text-decoration:none}
+.wl-link:hover{background:var(--gold);color:#0b1630}
 </style>
 
 <canvas id="snow" aria-hidden="true"></canvas>
@@ -162,13 +162,13 @@ footer{border-top:1px solid var(--line);padding-block:26px 40px;color:var(--snow
     <div class="hero-inner">
       <div class="kicker">Ring ring…</div>
       <h1>This Christmas, the North Pole is calling</h1>
-      <p>A personal five-minute phone call from Father Christmas, to any UK phone, on an evening you choose between 1 and 24 December. He knows their name, how they've been this year, and what's on their list. And they get to talk back.</p>
+      <p>A personal five-minute phone call from Father Christmas, to any UK phone, on an evening you choose between 1 and 24 December. You tell him a little about them, so he can chat about their year and what's on their list. And they get to talk back.</p>
       <div class="hero-cta">
         <a class="big-btn" href="https://buy.stripe.com/8x214o9MT0hcaJf8921RC01">Book their call · £7.99</a>
         <button type="button" class="hear-btn" id="hear" aria-label="Play a 26-second sample of Father Christmas's voice"><span class="ico" aria-hidden="true">▶</span><span id="hear-txt">Hear Father Christmas</span></button>
         <audio id="hear-audio" src="audio/father-christmas-demo.mp3" preload="none"></audio>
         <span class="sleeps"><b id="sleeps">—</b> sleeps until Christmas</span>
-        <a class="wl-link" href="#wl">Not ready to book yet? Join the waitlist</a>
+        <a class="wl-link" href="#wl">Not ready yet? Join the free waitlist</a>
       </div>
     </div>
   </header>
