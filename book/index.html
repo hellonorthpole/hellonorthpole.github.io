@@ -73,8 +73,9 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
   <nav><a class="brand" href="/">Hello <span>North Pole</span></a></nav>
 
   <div id="form-wrap">
-    <div class="kicker">Thank you!</div>
-    <h1>Now, let's book Father Christmas's call</h1>
+    <div class="kicker">Book now, pay later</div>
+    <h1>Let's book Father Christmas's call</h1>
+    <p class="lead" id="paid-banner" style="display:none;color:var(--gold-soft);font-weight:700">Payment received, thank you! Now choose when he should ring.</p>
     <p class="lead">Choose when he should ring, and tell him a little about your child. It takes about two minutes. Everything here stays between you and the North Pole, and we delete it after Christmas.</p>
 
     <form id="bk" novalidate>
@@ -134,6 +135,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
       <a class="btn gold" href="/north-pole.vcf">Save Father Christmas's number</a>
       <a class="btn line" id="ics" href="#" download="father-christmas-call.ics">Add to my calendar</a>
     </div>
+    <div id="pay-box" style="display:none;margin-top:22px;padding:18px;border:1.5px solid var(--gold);border-radius:14px;text-align:center">
+      <p class="lead" style="margin:0 0 6px;color:var(--snow)"><b>One last step: pay £7.99 to confirm.</b></p>
+      <p class="small" style="margin:0 0 14px">Pay now, or any time before 30 November. We'll hold your slot until then. Brothers and sisters: use code SIBLINGS25.</p>
+      <a class="btn gold" id="pay-btn" href="#">Pay £7.99 and confirm</a>
+    </div>
+    <p id="paid-box" class="lead" style="display:none;margin-top:18px;color:var(--gold-soft);font-weight:700">✓ Paid. Your call is confirmed.</p>
     <p class="small" style="margin-top:18px">He rings from 020 3911 9303. Questions? Just reply to your booking email.</p>
   </div>
 </div>
@@ -142,7 +149,22 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
 (function () {
   var API = "https://hnp-booking.teethingissues.workers.dev";
   var DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], full = {}, day = null, slot = null;
-  var session = new URLSearchParams(location.search).get("session_id") || "";
+  var PAY = "https://buy.stripe.com/8x214o9MT0hcaJf8921RC01", qs = new URLSearchParams(location.search);
+  var paidNow = qs.get("paid") || "", session = qs.get("session_id") || paidNow;
+  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function showDone(line, isPaid, payHref) {
+    document.getElementById("done-line").textContent = line;
+    document.getElementById("pay-box").style.display = isPaid ? "none" : "block";
+    document.getElementById("paid-box").style.display = isPaid ? "block" : "none";
+    if (payHref) document.getElementById("pay-btn").href = payHref;
+    document.getElementById("form-wrap").style.display = "none"; document.getElementById("done").style.display = "block"; window.scrollTo(0, 0);
+  }
+  if (paidNow) {                       // back from Stripe
+    var prev = read("hnp-booking");
+    if (prev) { try { var pb = JSON.parse(prev); store("hnp-booking", JSON.stringify({ line: pb.line, paid: true })); showDone(pb.line, true); } catch (e) {} }
+    else document.getElementById("paid-banner").style.display = "block";
+  }
   var age = document.getElementById("age");
   for (var a = 2; a <= 12; a++) { var o = document.createElement("option"); o.textContent = a; age.appendChild(o); }
 
@@ -202,13 +224,16 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
           "SUMMARY:Father Christmas rings " + body.child_name + " 🎅", "DESCRIPTION:Keep your phone nearby! He rings from 020 3911 9303.",
           "BEGIN:VALARM", "TRIGGER:-PT15M", "ACTION:DISPLAY", "DESCRIPTION:Father Christmas rings in 15 minutes", "END:VALARM", "END:VEVENT", "END:VCALENDAR"].join("\r\n");
         document.getElementById("ics").href = "data:text/calendar;charset=utf-8," + encodeURIComponent(ics);
-        document.getElementById("form-wrap").style.display = "none"; document.getElementById("done").style.display = "block"; window.scrollTo(0, 0);
+        var line = "Father Christmas will ring " + body.child_name + " on " + nice(day) + " at " + s.label + ".";
+        store("hnp-booking", JSON.stringify({ line: line, paid: !!session }));
+        try { if (window.fbq) fbq("track", "Lead"); } catch (e) {}
+        showDone(line, !!session, PAY + "?client_reference_id=" + encodeURIComponent(d.id) + "&prefilled_email=" + encodeURIComponent(body.email));
       })
       .catch(function () { err.textContent = "We couldn't reach the North Pole. Please check your connection and try again."; go.disabled = false; go.textContent = "Book the call"; });
   });
 })();
 </script>
 <!-- meta-pixel -->
-<script>(function(){try{if(localStorage.getItem('ck-consent')!=='yes')return}catch(e){return}!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1082198621368376');fbq('track','PageView');fbq('track','Purchase',{value:7.99,currency:'GBP'})})();</script>
+<script>(function(){try{if(localStorage.getItem('ck-consent')!=='yes')return}catch(e){return}!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','1082198621368376');fbq('track','PageView');if(location.search.indexOf('paid=')>-1)fbq('track','Purchase',{value:7.99,currency:'GBP'})})();</script>
 </body>
 </html>
