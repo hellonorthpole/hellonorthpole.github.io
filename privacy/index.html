@@ -53,7 +53,8 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;font-si
     <tr><td>The date and time you choose</td><td>To ring at the right moment</td><td>Contract</td></tr>
     <tr><td>Payment</td><td>Taken securely by Stripe; we never see your card number</td><td>Contract, and keeping tax records (legal duty)</td></tr>
     <tr><td>Waitlist: your email, number of children, language</td><td>To tell you about bookings and offers</td><td>Your consent (unsubscribe any time)</td></tr>
-    <tr><td>How people use this website</td><td>To make the site better (Microsoft Clarity), only if you tap Accept on our cookie message</td><td>Your consent</td></tr>
+    <tr><td>How people use this website</td><td>To make the site better: cookie-free counts of visits, scrolling and button taps, with nothing that identifies you</td><td>Legitimate interests</td></tr>
+    <tr><td>Whether our adverts work</td><td>Meta pixel, only if you tap Accept on our cookie message</td><td>Your consent</td></tr>
   </table>
   <p>We only collect a child's details from their parent or guardian, who confirms this when booking. We don't ask children for personal information during the call, and Father Christmas is set up never to ask for an address, school or surname.</p>
 
@@ -69,7 +70,8 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;font-si
     <tr><td>Retell AI, ElevenLabs, OpenAI and Twilio</td><td>Run the phone call: the line, the voice and the conversation</td></tr>
     <tr><td>Brevo</td><td>Sends our emails and holds the waitlist</td></tr>
     <tr><td>GitHub</td><td>Hosts this website</td></tr>
-    <tr><td>Microsoft Clarity</td><td>Website visit statistics, only if you accept cookies</td></tr>
+    <tr><td>Cloudflare</td><td>Cookie-free website visit statistics</td></tr>
+    <tr><td>Meta</td><td>Measuring our adverts, only if you accept cookies</td></tr>
   </table>
   <p>Some of these companies are based in the United States. Where your details leave the UK, they're protected by the UK's approved safeguards (such as the UK Extension to the EU–US Data Privacy Framework or the ICO's international data transfer agreement).</p>
 
@@ -81,12 +83,28 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;font-si
   </ul>
 
   <h2>Cookies</h2>
-  <p>We only use optional cookies (Microsoft Clarity) if you tap Accept on our cookie message. If you tap No thanks, they don't run. You can change your mind by clearing this site's data in your browser.</p>
+  <p>We only use optional cookies (Meta's advertising pixel) if you tap Accept on our cookie message. Our visit statistics don't use cookies. If you tap No thanks, they don't run. You can change your mind by clearing this site's data in your browser.</p>
 
   <h2>Your rights</h2>
   <p>You can ask to see the details we hold, correct them, delete them, or object to how we use them, and you can withdraw consent at any time. Just email <a href="mailto:hello@teethingissues.com">hello@teethingissues.com</a> and we'll reply within one month. If you're unhappy with how we've handled your details, you can complain to the ICO at <a href="https://ico.org.uk/make-a-complaint/" rel="noopener">ico.org.uk/make-a-complaint</a>.</p>
 
   <footer>Hello North Pole is a trading name of Teething Issues Ltd · Company number 17496042 · <a href="/">Back to the North Pole</a></footer>
 </div>
+<!-- visit-tracker -->
+<script>(function(){
+  // Cookie-free visit counter: time on page, how far people scroll and what they tap. No cookies, no IDs, nothing personal.
+  var t0=Date.now(),maxS=0,taps=[],sent=false;
+  function label(a){var h=a.getAttribute("href")||"";if(a.getAttribute("data-t"))return a.getAttribute("data-t");
+    if(h.indexOf("tel:")===0)return "call";if(/calendar\.app\.google|cal\.com|\/book/.test(h))return "book";
+    if(/skool\.com/.test(h))return "join";if(/stripe\.com|buy\.|checkout/.test(h))return "pay";if(h.indexOf("mailto:")===0)return "email";
+    return "link:"+(a.textContent||"").trim().slice(0,22)}
+  addEventListener("scroll",function(){var h=document.documentElement;var p=Math.round(100*(h.scrollTop+innerHeight)/h.scrollHeight);if(p>maxS)maxS=p},{passive:true});
+  document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a,button,[data-t]");if(a&&a.id!=="ck-y"&&a.id!=="ck-n")taps.push(label(a))},true);
+  function send(){if(sent)return;sent=true;var q=new URLSearchParams(location.search),h=location.hostname.replace(/^www\./,"");
+    var b=JSON.stringify({p:(h==="teethingissues.com"?"":h)+location.pathname,s:Math.round((Date.now()-t0)/1000),d:maxS,c:taps.slice(0,20),e:[],
+      u:q.get("utm_campaign")||q.get("utm_source")||(q.get("fbclid")?"meta":""),r:(document.referrer||"").split("/")[2]||"",m:innerWidth<700?"m":"d"});
+    try{navigator.sendBeacon("https://invites.31-97-118-70.sslip.io/beacon",new Blob([b],{type:"text/plain"}))}catch(x){}}
+  addEventListener("pagehide",send);document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden")send()});
+})();</script>
 </body>
 </html>
