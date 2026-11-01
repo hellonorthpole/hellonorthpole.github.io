@@ -82,8 +82,10 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
       <div class="card">
         <div class="step">Step 1</div>
         <h2>When should he ring?</h2>
-        <p class="hint">Calls run from 1 to 24 December. Weekday calls are in the evening, after school. All times are UK time.</p>
-        <div class="cal" id="cal" role="group" aria-label="Choose a day in December"></div>
+        <p class="hint" id="cal-hint">Calls run from 1 to 24 December. Weekday calls are in the evening, after school. All times are UK time.</p>
+        <p style="margin:0 0 16px"><label for="code">Got a Founding Family code? <span class="opt">(optional)</span></label><input id="code" autocomplete="off" style="max-width:260px;text-transform:uppercase"></p>
+        <p class="picked" id="ff-note" style="display:none;margin:0 0 14px">December's Founding Family places have gone, so choose an evening in November.</p>
+        <div class="cal" id="cal" role="group" aria-label="Choose a day"></div>
         <div class="times" id="times" role="group" aria-label="Choose a time"></div>
         <p class="picked" id="picked" aria-live="polite"></p>
       </div>
@@ -136,8 +138,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
       <a class="btn line" id="ics" href="#" download="father-christmas-call.ics">Add to my calendar</a>
     </div>
     <div id="pay-box" style="display:none;margin-top:22px;padding:18px;border:1.5px solid var(--gold);border-radius:14px;text-align:center">
-      <p class="lead" style="margin:0 0 6px;color:var(--snow)"><b>One last step: pay £7.99 to confirm.</b></p>
-      <p class="small" style="margin:0 0 14px">Pay now, or any time before 30 November. We'll hold your slot until then. Brothers and sisters: use code SIBLINGS25.</p>
+      <p class="lead" id="pay-title" style="margin:0 0 6px;color:var(--snow)"><b>One last step: pay £7.99 to confirm.</b></p>
+      <p class="small" id="pay-note" style="margin:0 0 14px">Pay now, or any time before 30 November. We'll hold your slot until then. Brothers and sisters: use code SIBLINGS25.</p>
       <a class="btn gold" id="pay-btn" href="#">Pay £7.99 and confirm</a>
     </div>
     <p id="paid-box" class="lead" style="display:none;margin-top:18px;color:var(--gold-soft);font-weight:700">✓ Paid. Your call is confirmed.</p>
@@ -158,6 +160,11 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
     document.getElementById("pay-box").style.display = isPaid ? "none" : "block";
     document.getElementById("paid-box").style.display = isPaid ? "block" : "none";
     if (payHref) document.getElementById("pay-btn").href = payHref;
+    if (codeVal() === FF) {             // Founding Family: the code takes it to £0, and it must be confirmed before the November call
+      document.getElementById("pay-title").innerHTML = "<b>One last step: confirm your free call.</b>";
+      document.getElementById("pay-note").textContent = "Your Founding Family code is already filled in, so it comes to £0. Please confirm before your call, or Father Christmas can't ring.";
+      document.getElementById("pay-btn").textContent = "Confirm my free call";
+    }
     document.getElementById("form-wrap").style.display = "none"; document.getElementById("done").style.display = "block"; window.scrollTo(0, 0);
   }
   if (paidNow) {                       // back from Stripe
@@ -168,27 +175,41 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
   var age = document.getElementById("age");
   for (var a = 2; a <= 12; a++) { var o = document.createElement("option"); o.textContent = a; age.appendChild(o); }
 
+  // 1 Nov 2026: code FOUNDINGFAMILY shows November (3-30) only; everyone else sees 1-24 December. The worker enforces the same rule.
+  var FF = "FOUNDINGFAMILY", month = 12;
+  function codeVal() { return document.getElementById("code").value.toUpperCase().replace(/[^A-Z0-9]/g, ""); }
   function slotsFor(d) {
-    var dow = new Date(Date.UTC(2026, 11, d)).getUTCDay(), weekend = dow === 0 || dow === 6 || d === 24, out = [];
+    var dow = new Date(Date.UTC(2026, month - 1, d)).getUTCDay(), weekend = dow === 0 || dow === 6 || (month === 12 && d === 24), out = [];
     for (var m = (weekend ? 9 : 16) * 60; m <= 19 * 60 + 45; m += 15) {
       var hh = String(Math.floor(m / 60)).padStart(2, "0"), mm = String(m % 60).padStart(2, "0");
-      out.push({ id: "2026-12-" + String(d).padStart(2, "0") + "T" + hh + ":" + mm, label: (m / 60 > 12 ? Math.floor(m / 60) - 12 : Math.floor(m / 60)) + ":" + mm + (m >= 720 ? "pm" : "am") });
+      out.push({ id: "2026-" + month + "-" + String(d).padStart(2, "0") + "T" + hh + ":" + mm, label: (m / 60 > 12 ? Math.floor(m / 60) - 12 : Math.floor(m / 60)) + ":" + mm + (m >= 720 ? "pm" : "am") });
     }
     return out;
   }
-  function nice(d) { return new Date(Date.UTC(2026, 11, d)).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }); }
+  function nice(d) { return new Date(Date.UTC(2026, month - 1, d)).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }); }
 
   var cal = document.getElementById("cal");
-  ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].forEach(function (n) { var e = document.createElement("div"); e.className = "dow"; e.textContent = n; cal.appendChild(e); });
-  var lead = (new Date(Date.UTC(2026, 11, 1)).getUTCDay() + 6) % 7;
-  for (var i = 0; i < lead; i++) { var b = document.createElement("div"); b.className = "blank"; cal.appendChild(b); }
-  for (var d = 1; d <= 24; d++) (function (d) {
-    var btn = document.createElement("button"); btn.type = "button"; btn.className = "day" + (d === 24 ? " eve" : "");
-    btn.setAttribute("aria-pressed", "false"); btn.setAttribute("aria-label", nice(d));
-    btn.innerHTML = d + "<small>" + (d === 24 ? "Xmas Eve" : DOW[new Date(Date.UTC(2026, 11, d)).getUTCDay()]) + "</small>";
-    btn.onclick = function () { day = d; slot = null; [].forEach.call(cal.querySelectorAll(".day"), function (x) { x.setAttribute("aria-pressed", x === btn ? "true" : "false"); }); drawTimes(); };
-    cal.appendChild(btn);
-  })(d);
+  function drawCal() {
+    var ff = codeVal() === FF; month = ff ? 11 : 12; day = null; slot = null; cal.innerHTML = "";
+    document.getElementById("times").innerHTML = ""; document.getElementById("picked").textContent = "";
+    document.getElementById("ff-note").style.display = ff ? "block" : "none";
+    document.getElementById("cal-hint").textContent = (ff ? "Founding Family calls run from 3 to 30 November." : "Calls run from 1 to 24 December.") + " Weekday calls are in the evening, after school. All times are UK time.";
+    cal.setAttribute("aria-label", ff ? "Choose a day in November" : "Choose a day in December");
+    ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].forEach(function (n) { var e = document.createElement("div"); e.className = "dow"; e.textContent = n; cal.appendChild(e); });
+    var first = ff ? 3 : 1, last = ff ? 30 : 24, lead = (new Date(Date.UTC(2026, month - 1, first)).getUTCDay() + 6) % 7;
+    for (var i = 0; i < lead; i++) { var b = document.createElement("div"); b.className = "blank"; cal.appendChild(b); }
+    for (var d = first; d <= last; d++) (function (d) {
+      var eve = month === 12 && d === 24, btn = document.createElement("button"); btn.type = "button"; btn.className = "day" + (eve ? " eve" : "");
+      btn.setAttribute("aria-pressed", "false"); btn.setAttribute("aria-label", nice(d));
+      btn.innerHTML = d + "<small>" + (eve ? "Xmas Eve" : DOW[new Date(Date.UTC(2026, month - 1, d)).getUTCDay()]) + "</small>";
+      btn.onclick = function () { day = d; slot = null; [].forEach.call(cal.querySelectorAll(".day"), function (x) { x.setAttribute("aria-pressed", x === btn ? "true" : "false"); }); drawTimes(); };
+      cal.appendChild(btn);
+    })(d);
+  }
+  document.getElementById("code").value = (qs.get("code") || "").toUpperCase();
+  var lastFF = null;
+  document.getElementById("code").addEventListener("input", function () { var f = codeVal() === FF; if (f !== lastFF) { lastFF = f; drawCal(); } });
+  lastFF = codeVal() === FF; drawCal();
 
   function drawTimes() {
     var t = document.getElementById("times"); t.innerHTML = "";
@@ -209,7 +230,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
     var err = document.getElementById("err"), go = document.getElementById("go"); err.textContent = "";
     if (!slot) { err.textContent = "Please choose a day and a time in Step 1."; document.getElementById("cal").scrollIntoView({ behavior: "smooth", block: "center" }); return; }
     var body = { slot: slot, child_name: v("child_name"), age: v("age"), pronounce: v("pronounce"), proud: v("proud"), wishes: v("wishes"), nudge: v("nudge"), avoid: v("avoid"),
-                 parent_name: v("parent_name"), grownup_title: v("grownup_title"), phone: v("phone"), email: v("email"), consent: document.getElementById("consent").checked, website: v("website"), session_id: session };
+                 parent_name: v("parent_name"), grownup_title: v("grownup_title"), phone: v("phone"), email: v("email"), code: codeVal(), consent: document.getElementById("consent").checked, website: v("website"), session_id: session };
     go.disabled = true; go.textContent = "Sending it to the North Pole…";
     fetch(API + "/book", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
       .then(function (r) { return r.json(); })
@@ -217,7 +238,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
         if (!d.ok) { err.textContent = d.error || "Something went wrong. Please try again."; go.disabled = false; go.textContent = "Book the call"; return; }
         var s = slotsFor(day).filter(function (x) { return x.id === slot; })[0];
         document.getElementById("done-line").textContent = "Father Christmas will ring " + body.child_name + " on " + nice(day) + " at " + s.label + ".";
-        var start = slot.replace(/[-:]/g, "") + "00", endM = new Date(Date.UTC(2026, 11, day, +slot.slice(11, 13), +slot.slice(14, 16) + 10));
+        var start = slot.replace(/[-:]/g, "") + "00", endM = new Date(Date.UTC(2026, month - 1, day, +slot.slice(11, 13), +slot.slice(14, 16) + 10));
         var end = endM.toISOString().replace(/[-:]/g, "").slice(0, 15);
         var ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Hello North Pole//EN", "BEGIN:VEVENT", "UID:" + d.id + "@hellonorthpole.co.uk",
           "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z", "DTSTART;TZID=Europe/London:" + start, "DTEND;TZID=Europe/London:" + end,
@@ -227,7 +248,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
         var line = "Father Christmas will ring " + body.child_name + " on " + nice(day) + " at " + s.label + ".";
         store("hnp-booking", JSON.stringify({ line: line, paid: !!session }));
         try { if (window.fbq) fbq("track", "Lead"); } catch (e) {}
-        showDone(line, !!session, PAY + "?client_reference_id=" + encodeURIComponent(d.id) + "&prefilled_email=" + encodeURIComponent(body.email) + (qs.get("code") ? "&prefilled_promo_code=" + encodeURIComponent(qs.get("code").toUpperCase().replace(/[^A-Z0-9]/g, "")) : ""));
+        showDone(line, !!session, PAY + "?client_reference_id=" + encodeURIComponent(d.id) + "&prefilled_email=" + encodeURIComponent(body.email) + (codeVal() ? "&prefilled_promo_code=" + encodeURIComponent(codeVal()) : ""));
       })
       .catch(function () { err.textContent = "We couldn't reach the North Pole. Please check your connection and try again."; go.disabled = false; go.textContent = "Book the call"; });
   });
