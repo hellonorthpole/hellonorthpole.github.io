@@ -227,7 +227,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
         var line = "Father Christmas will ring " + body.child_name + " on " + nice(day) + " at " + s.label + ".";
         store("hnp-booking", JSON.stringify({ line: line, paid: !!session }));
         try { if (window.fbq) fbq("track", "Lead"); } catch (e) {}
-        showDone(line, !!session, PAY + "?client_reference_id=" + encodeURIComponent(d.id) + "&prefilled_email=" + encodeURIComponent(body.email));
+        showDone(line, !!session, PAY + "?client_reference_id=" + encodeURIComponent(d.id) + "&prefilled_email=" + encodeURIComponent(body.email) + (qs.get("code") ? "&prefilled_promo_code=" + encodeURIComponent(qs.get("code").toUpperCase().replace(/[^A-Z0-9]/g, "")) : ""));
       })
       .catch(function () { err.textContent = "We couldn't reach the North Pole. Please check your connection and try again."; go.disabled = false; go.textContent = "Book the call"; });
   });
