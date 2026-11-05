@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creators | Hello North Pole</title>
+<meta name="description" content="Hello North Pole creators: a gifted call from Father Christmas for your family, plus your own code. Your followers get 10% off and you earn 25%, or 30% with 10k+ followers.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Creator page DRAFT (5 Nov 2026). One step for partners + Founding Families: details once -> gifted-call button + own code on screen.
+   Not live until Ruby says "publish". Same look as /book/ and /partners/. noindex. */
+:root{color-scheme:dark;--night:#020C24;--night-2:#0F204B;--night-3:#16295A;--line:#2A3F73;--snow:#FFFFFF;--snow-dim:#D6DCEB;--snow-faint:#9AA6C4;
+  --gold:#FAB600;--gold-soft:#F8D057;--berry:#C8372D;--display:"Playfair Display",Georgia,serif;--sans:"Lato",-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--night)}
+body{margin:0;background:radial-gradient(1200px 700px at 70% -10%,#13306E 0%,rgba(2,12,36,0) 60%),var(--night);color:var(--snow-dim);font-family:var(--sans);
+  font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;padding:0 16px 60px}
+.wrap{max-width:760px;margin:0 auto}
+a{color:var(--gold)}
+b{color:var(--snow)}
+nav{padding:18px 0}
+.brand{font-family:var(--display);font-weight:600;font-size:22px;color:var(--snow);text-decoration:none}
+.brand span{color:var(--gold)}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:26px;align-items:center;margin:6px 0 10px}
+.hero img{width:100%;height:auto;max-height:440px;object-fit:cover;object-position:50% 30%;border-radius:18px;border:1px solid var(--line);box-shadow:0 24px 60px -24px rgba(0,0,0,.8);display:block}
+@media (max-width:640px){.hero{grid-template-columns:1fr}.hero img{max-height:300px;object-fit:cover;object-position:50% 30%}}
+.kicker{font-family:var(--display);font-style:italic;font-weight:500;font-size:22px;color:var(--gold);line-height:1.2}
+h1{font-family:var(--display);font-weight:500;color:var(--snow);font-size:clamp(32px,6vw,46px);line-height:1.08;margin:8px 0 12px}
+h2{font-family:var(--display);font-weight:500;color:var(--snow);font-size:24px;margin:0 0 6px}
+.lead{font-size:18px;color:var(--snow);margin:0 0 10px}
+.gets{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin:22px 0}
+.gets div{background:var(--night-2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:15px}
+.gets strong{display:block;font-family:var(--display);font-weight:500;color:var(--gold);font-size:21px;line-height:1.2;margin-bottom:4px}
+.card{background:var(--night-2);border:1px solid var(--line);border-radius:18px;padding:clamp(18px,4vw,30px);margin:18px 0}
+.card.gift{border-color:var(--gold);box-shadow:0 0 0 1px rgba(250,182,0,.25),0 20px 50px -26px rgba(250,182,0,.55)}
+.step{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.hint{color:var(--snow-faint);font-size:14px;margin:0 0 14px}
+label{display:block;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--snow-dim);margin:14px 0 6px}
+input,select{width:100%;font:inherit;font-size:16px;color:var(--snow);background:var(--night-3);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:var(--gold)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+.consent{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--snow-dim);text-transform:none;letter-spacing:0;font-weight:400;margin:18px 0}
+.consent input{width:20px;height:20px;margin-top:3px;flex:none;accent-color:var(--gold)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.go{display:block;width:100%;font:inherit;font-weight:700;font-size:18px;color:#020C24;background:linear-gradient(180deg,var(--gold-soft),var(--gold));
+  border:0;border-radius:999px;padding:16px;cursor:pointer;box-shadow:0 12px 34px -10px rgba(250,182,0,.6);text-align:center;text-decoration:none}
+.go:disabled{opacity:.6;cursor:wait}
+.err{color:var(--gold-soft);font-weight:700;min-height:1.4em;margin:12px 0 0}
+.btn{display:inline-block;font:inherit;font-weight:700;font-size:15px;border-radius:999px;padding:10px 18px;cursor:pointer;color:var(--snow);background:transparent;border:1.5px solid var(--gold)}
+.code{font:600 clamp(30px,7vw,40px) var(--display);color:var(--gold);letter-spacing:1px;margin:4px 0}
+.cap{background:var(--night-3);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;font-size:15px;color:var(--snow)}
+.small{font-size:14px;color:var(--snow-faint)}
+.terms li{margin:4px 0}
+.draft{background:var(--berry);color:#fff;border-radius:10px;padding:8px 12px;font-size:14px;margin:12px 0}
+footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;font-size:13px;color:var(--snow-faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav><a class="brand" href="/">Hello <span>North Pole</span></a></nav>
+
+  <div class="hero">
+    <div>
+      <p class="kicker">Hello, lovely creator 🎄</p>
+      <h1>Your gifted call and your own code, in one go.</h1>
+      <p class="lead">The phone rings on a cosy November evening. The whole family gathers round. It's Father Christmas.</p>
+      <p style="margin:0">Fill this in once. Everything appears on this screen, straight away.</p>
+    </div>
+    <img src="/img/santa-phone.jpg" alt="Father Christmas in his cosy study, on a red telephone, reading a child's letter by the fire." width="760" height="949">
+  </div>
+
+  <div class="gets">
+    <div><strong>A call, on us</strong>A personalised call from Father Christmas, any evening from 3 to 30 November. Brothers and sisters too.</div>
+    <div><strong>10% off for them</strong>Your own code gives your followers 10% off their call.</div>
+    <div><strong>25% for you</strong>You earn 25% of what they pay. With 10k+ followers, it's 30%.</div>
+    <div><strong>One honest post</strong>That's all we ask: one honest post about it, marked #ad.</div>
+  </div>
+
+  <div id="draftnote" class="draft" hidden>Preview only (staging). Nothing here is live and no real code is made.</div>
+
+  <form id="join" class="card" novalidate>
+    <p class="step">Two minutes</p>
+    <h2>Tell us who you are</h2>
+    <p class="hint">Then your code and your booking button pop up right here.</p>
+    <div class="grid">
+      <div><label for="name">Your name</label><input id="name" name="name" type="text" autocomplete="name" required maxlength="60"></div>
+      <div><label for="email">Your email</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="120"></div>
+      <div><label for="handle">Main social handle</label><input id="handle" name="handle" type="text" placeholder="@yourname" required maxlength="60"></div>
+      <div><label for="followers">Followers on that account</label>
+        <select id="followers" name="followers" required>
+          <option value="">Choose one</option><option value="under10k">Under 10k</option><option value="10k-50k">10k to 50k</option><option value="50k-100k">50k to 100k</option><option value="100k+">100k+</option>
+        </select></div>
+    </div>
+    <div class="hp" aria-hidden="true"><label for="website">Leave this empty</label><input id="website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+    <label class="consent" for="agree"><input id="agree" name="agree" type="checkbox"><span>I'm happy with the terms below and the <a href="/founding-families/" target="_blank">Founding Families agreement</a>, including one honest post about the call, marked #ad.</span></label>
+    <button class="go" id="go" type="submit">Show me my code</button>
+    <p class="err" id="msg" role="alert"></p>
+  </form>
+
+  <div id="done" hidden>
+    <p class="kicker" id="hi">You're in 🎄</p>
+
+    <div class="card gift">
+      <p class="step">First, the fun bit</p>
+      <h2>Book your gifted call</h2>
+      <p>Your code <b>FOUNDINGFAMILY</b> is already filled in, so it comes to £0. Pick any evening from 3 to 30 November, and tell Father Christmas what to talk about.</p>
+      <a class="go" id="gift" href="/book/?code=FOUNDINGFAMILY">Book my gifted call</a>
+      <p class="small" style="margin:10px 0 0">Booking for brothers or sisters too? Book each one with the same code, it's free for them as well.</p>
+    </div>
+
+    <div class="card">
+      <p class="step">Then, share the magic</p>
+      <h2>Your code</h2>
+      <p class="code" id="code"></p>
+      <p style="margin:0 0 6px">Your followers get 10% off. You earn <b id="rate">25%</b> of what they pay.</p>
+      <p style="margin:0 0 12px">Your link: <a id="link" href="#"></a></p>
+      <button type="button" class="btn" id="copy">Copy my link</button>
+      <p class="small" id="note" style="margin:12px 0 0">Take a screenshot so your code is always to hand.</p>
+    </div>
+
+    <div class="card">
+      <p class="step">After your call</p>
+      <h2>Ready-to-post captions</h2>
+      <p class="hint">Use these or your own words. Just say what you really thought, and keep the #ad.</p>
+      <div id="caps"></div>
+    </div>
+  </div>
+
+  <h2 style="margin-top:34px">The terms, in plain English</h2>
+  <ul class="terms">
+    <li><b>Your gifted call:</b> one family call from Father Christmas, booked with code FOUNDINGFAMILY for an evening from 3 to 30 November. Brothers and sisters are free too.</li>
+    <li><b>What we ask:</b> one honest post about the call on TikTok or Instagram within 7 days, marked #ad, tagging @hello_northpole. You can change your mind at any time. Full details: <a href="/founding-families/">Founding Families agreement</a>.</li>
+    <li><b>Your code:</b> anyone who uses it at checkout gets 10% off their call.</li>
+    <li><b>What you earn:</b> 25% of what they paid, or 30% with 10k+ followers. A £7.99 call with your code costs them £7.19, so you earn £1.79, or £2.15 at 30%.</li>
+    <li>We check follower counts from time to time. If yours is under 10k, your rate is 25%.</li>
+    <li>We pay by bank transfer each month once you've earned £10. Anything under £10 carries over to the next month.</li>
+    <li>When you first reach £10, we'll contact you privately for your bank details. We never ask for them on this page.</li>
+    <li>No commission on free or £0 bookings, refunded bookings, or your own booking.</li>
+    <li>Whenever you post your code, add <b>#ad</b>. You earn money from it, so UK advertising rules say it needs the label.</li>
+    <li>Please share honestly: no spam, no paid ads using our name, and no promises we can't keep.</li>
+    <li>Codes work on calls booked at hellonorthpole.co.uk for Christmas 2026. We may end a code or the scheme with notice, and we'll always pay what you've already earned.</li>
+  </ul>
+  <p>Any questions? We'd love to help: <a href="mailto:hello@teethingissues.com">hello@teethingissues.com</a>. Thank you for sharing us. ✨</p>
+
+  <footer>Hello North Pole is a trading name of Teething Issues Ltd · Company number 17496042 · <a href="/privacy/">Privacy</a> · <a href="/">Back to the North Pole</a></footer>
+</div>
+<script>
+(function(){
+  // Live API once published. On a local preview (localhost) or with ?staging=1 it talks to the staging copy, which never makes a real code.
+  var stg = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) || /[?&]staging=1/.test(location.search);
+  var API = (stg ? "https://partners-staging.31-97-118-70.sslip.io" : "https://partners.31-97-118-70.sslip.io") + "/creator";
+  if (stg) document.getElementById("draftnote").hidden = false;
+  var CAPS = [
+    "The phone rang, and it was Father Christmas. The whole room went quiet. 🎄 10% off with my code {CODE}: {LINK} #ad",
+    "Best five minutes of our Christmas? The moment Father Christmas called. Code {CODE} gets you 10% off: {LINK} #ad",
+    "We picked the evening, then the phone rang. A call from the North Pole they'll talk about all year. {CODE} = 10% off {LINK} #ad"
+  ];
+  var f = document.getElementById("join"), msg = document.getElementById("msg"), go = document.getElementById("go");
+  function v(id){ return document.getElementById(id).value.trim(); }
+  f.addEventListener("submit", function(e){
+    e.preventDefault(); msg.textContent = "";
+    if (v("name").length < 2) { msg.textContent = "Please add your name."; return; }
+    if (!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(v("email"))) { msg.textContent = "Please check your email address."; return; }
+    if (v("handle").length < 2) { msg.textContent = "Please add your main social handle."; return; }
+    if (!v("followers")) { msg.textContent = "Please choose your follower count."; return; }
+    if (!document.getElementById("agree").checked) { msg.textContent = "Please tick to say yes to the terms."; return; }
+    go.disabled = true; go.textContent = "Making your code…";
+    fetch(API, { method: "POST", headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({ name: v("name"), email: v("email"), handle: v("handle"), followers: v("followers"), website: v("website"), agree: true }) })
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (!d.ok) throw new Error(d.msg || "Something went wrong.");
+      var link = d.share, short = link.replace("https://", "");
+      document.getElementById("hi").textContent = "You're in, " + v("name").split(/\s+/)[0] + " 🎄";
+      document.getElementById("code").textContent = d.code;
+      document.getElementById("rate").textContent = (d.rate || 25) + "%";
+      if (d.gift) document.getElementById("gift").href = d.gift.replace("https://hellonorthpole.co.uk", "");
+      var a = document.getElementById("link"); a.href = link; a.textContent = short;
+      if (d.again) document.getElementById("note").textContent = "You've already joined, so here's your code again. Take a screenshot so it's always to hand.";
+      if (d.draft) document.getElementById("note").textContent = "Preview only: this code isn't live yet.";
+      var box = document.getElementById("caps"); box.innerHTML = "";
+      CAPS.forEach(function(c){ var p = document.createElement("div"); p.className = "cap"; p.textContent = c.split("{CODE}").join(d.code).split("{LINK}").join(short); box.appendChild(p); });
+      document.getElementById("copy").onclick = function(){ var b = this; try { navigator.clipboard.writeText(link).then(function(){ b.textContent = "Copied ✓"; }); } catch (x) {} };
+      f.hidden = true; document.getElementById("done").hidden = false; document.getElementById("done").scrollIntoView({ behavior: "smooth" });
+    })
+    .catch(function(err){ msg.textContent = err.message || "Something went wrong. Please email hello@teethingissues.com."; go.disabled = false; go.textContent = "Show me my code"; });
+  });
+})();
+</script>
+<!-- visit-tracker -->
+<script>(function(){
+  // Cookie-free visit counter: time on page, how far people scroll and what they tap. No cookies, nothing personal.
+  // v = random number for this browser tab only (sessionStorage, gone when the tab closes) so one visit's pages can be joined up; e = sites linked out to.
+  var t0=Date.now(),maxS=0,taps=[],outs=[],sent=false,v="",n=0;
+  try{var ss=sessionStorage;v=ss.getItem("vt_id")||Math.random().toString(36).slice(2,10);ss.setItem("vt_id",v);n=(+ss.getItem("vt_n")||0)+1;ss.setItem("vt_n",n)}catch(x){}
+  function label(a){var h=a.getAttribute("href")||"";if(a.getAttribute("data-t"))return a.getAttribute("data-t");
+    if(h.indexOf("tel:")===0)return "call";if(/calendar\.app\.google|cal\.com|\/book/.test(h))return "book";
+    if(/skool\.com/.test(h))return "join";if(/stripe\.com|buy\.|checkout/.test(h))return "pay";if(h.indexOf("mailto:")===0)return "email";
+    return "link:"+(a.textContent||"").trim().slice(0,22)}
+  addEventListener("scroll",function(){var h=document.documentElement;var p=Math.round(100*(h.scrollTop+innerHeight)/h.scrollHeight);if(p>maxS)maxS=p},{passive:true});
+  document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a,button,[data-t]");if(a&&a.id!=="ck-y"&&a.id!=="ck-n"){taps.push(label(a));if(a.hostname&&a.hostname!==location.hostname&&outs.length<10)outs.push(a.hostname.replace(/^www\./,"").slice(0,30))}},true);
+  function send(){if(sent)return;sent=true;var q=new URLSearchParams(location.search),h=location.hostname.replace(/^www\./,"");
+    var b=JSON.stringify({p:(h==="teethingissues.com"?"":h)+location.pathname,s:Math.round((Date.now()-t0)/1000),d:maxS,c:taps.slice(0,20),e:outs,v:v,n:n,k:q.get("utm_content")||"",
+      u:q.get("utm_campaign")||q.get("utm_source")||(q.get("fbclid")?"meta":""),r:(document.referrer||"").split("/")[2]||"",m:innerWidth<700?"m":"d"});
+    try{navigator.sendBeacon("https://invites.31-97-118-70.sslip.io/beacon",new Blob([b],{type:"text/plain"}))}catch(x){}}
+  addEventListener("pagehide",send);document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden")send()});
+})();</script>
+</body>
+</html>

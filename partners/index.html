@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Partners | Hello North Pole</title>
-<meta name="description" content="Hello North Pole partners: family creators with 10k+ followers give their followers 10% off and earn 30% of what they pay.">
+<meta name="description" content="Hello North Pole partners: family creators give their followers 10% off and earn 25% of what they pay, or 30% with 10k+ followers.">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Lato:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* Partners page DRAFT (1 Nov 2026). Not live until Ruby says "publish". Same look as /founding-families/. noindex. */
+/* Partners page DRAFT (1 Nov 2026; 5 Nov: 25%/30% clash fixed, Founding Families sent to /creator/). Not live until Ruby says "publish". Same look as /founding-families/. noindex. */
 :root{color-scheme:dark;--night:#020C24;--night-2:#0F204B;--line:#2A3F73;--snow:#FFFFFF;--snow-dim:#D6DCEB;--snow-faint:#9AA6C4;--gold:#FAB600;
   --display:"Playfair Display",Georgia,serif;--sans:"Lato",-apple-system,"Segoe UI",sans-serif}
 *{box-sizing:border-box}
@@ -49,21 +49,21 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;font-si
   <nav><a class="brand" href="/">Hello <span>North Pole</span></a></nav>
 
   <h1>Share the magic. Get paid for it.</h1>
-  <p class="lead">Give your followers 10% off a personalised call from Father Christmas. You earn 30% of what they pay.</p>
-  <p>For family creators with 10k+ followers, and our Founding Families.</p>
+  <p class="lead">Give your followers 10% off a personalised call from Father Christmas. You earn 25% of what they pay, or 30% with 10k+ followers.</p>
+  <p>For family creators and our Founding Families.</p>
 
   <div class="steps">
     <div><strong>1</strong>Join below. With 10k+ followers, you get your own code straight away, like <b>EMMA10</b>.</div>
     <div><strong>2</strong>Share it on your socials, in your stories or your bio.</div>
-    <div><strong>3</strong>They save 10%. You earn about <b>£2.15</b> for every call booked with your code.</div>
+    <div><strong>3</strong>They save 10%. You earn up to <b>£2.15</b> for every call booked with your code.</div>
   </div>
 
-  <div class="box"><b>Founding Family?</b> No need to fill this in. Message us and we'll set up your code, at 25%.</div>
+  <div class="box"><b>Founding Family, or under 10k followers?</b> Your gifted call and your own code (25%) are one step away: <a href="/creator/">hellonorthpole.co.uk/creator</a>.</div>
 
   <h2>The terms, in plain English</h2>
   <ul>
     <li>Anyone who uses your code at checkout gets 10% off their call.</li>
-    <li>Creators with 10k+ followers earn 30% of what they paid. A £7.99 call with your code costs them £7.19, and you earn £2.15. Founding Families earn 25%.</li>
+    <li>Creators with 10k+ followers earn 30% of what they paid. A £7.99 call with your code costs them £7.19, and you earn £2.15. Under 10k followers, it's 25% (£1.79).</li>
     <li>We check follower counts from time to time. If yours is under 10k, we may move you to 25%.</li>
     <li>We pay by bank transfer each month once you've earned £10. Anything under £10 carries over to the next month.</li>
     <li>When you first reach £10, we'll email you privately for your bank details. We never ask for them on this page.</li>
@@ -112,8 +112,8 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;font-si
 (function(){
   var API = "https://partners.31-97-118-70.sslip.io/join";
   var CAPS = [
-    "The phone rang and it was Father Christmas. Asking for my child, by name. 🎄 10% off with my code {CODE}: {LINK} #ad",
-    "Best five minutes of December? Their face when Father Christmas calls. Code {CODE} gets you 10% off: {LINK} #ad",
+    "The phone rang, and it was Father Christmas. The whole room went quiet. 🎄 10% off with my code {CODE}: {LINK} #ad",
+    "Best five minutes of our Christmas? The moment Father Christmas called. Code {CODE} gets you 10% off: {LINK} #ad",
     "We picked the evening, then the phone rang. A call from the North Pole they'll talk about all year. {CODE} = 10% off {LINK} #ad"
   ];
   var f = document.getElementById("join"), msg = document.getElementById("msg"), go = document.getElementById("go");
