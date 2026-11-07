@@ -83,7 +83,7 @@ nav{display:flex;justify-content:space-between;align-items:center;padding-block:
 .quote small{display:block;font-family:var(--sans);font-style:normal;font-size:13px;color:var(--snow-faint);margin-top:6px}
 
 /* the sign-up: reserving a line on the Switchboard */
-.book{margin-block:clamp(50px,8vw,90px);display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(22px,4vw,48px);align-items:center;
+.book{margin-block:clamp(50px,8vw,90px);display:grid;grid-template-columns:1fr;max-width:760px;margin-inline:auto;text-align:center;gap:clamp(22px,4vw,48px);align-items:center;
   background:linear-gradient(160deg,#13306E,var(--night-2) 55%);border:1px solid var(--line);border-radius:24px;padding:clamp(22px,4vw,44px)}
 .book h2{font-family:var(--display);font-weight:500;font-size:clamp(30px,4vw,44px);line-height:1.08;margin:6px 0 0;text-wrap:balance}
 .book .lead{color:var(--snow-dim);margin:14px 0 0}
@@ -201,10 +201,10 @@ footer{border-top:1px solid var(--line);padding-block:26px 40px;color:var(--snow
     <div class="ch-photo"><img src="img/santa.jpg" alt="Father Christmas in his red robes, reading a child's letter beside the fire."></div>
     <div>
       <div class="ch-num">Chapter one</div>
-      <div class="kicker" style="margin-top:12px">It starts with a little secret.</div>
+      <div class="kicker" style="margin-top:12px">It starts with three minutes.</div>
       <h3>How do you book a call with Father Christmas?</h3>
-      <div class="lead">Tell us their name, a proud moment, one gentle nudge. They'll never know it's coming.</div>
-      <p class="small">Booking a Hello North Pole call is a secret between you and Tinsel. First, fill in a short form: your child's name and how to say it, your child's age, one or two proud moments from this year, and one gentle nudge for Father Christmas to mention, such as trying new vegetables or being kind to a little brother. Next, add the wishes on your child's Christmas list. Then pick the evening and time for the call, anywhere from 1 to 24 December, and pay online. The whole booking takes about three minutes. Your child never needs to know anything is planned, which is what makes the moment the phone rings so magical.</p>
+      <div class="lead">Their name, a proud moment, one gentle nudge. That's all Father Christmas needs.</div>
+      <p class="small">Booking a Hello North Pole call is quick. First, fill in a short form: your child's name and how to say it, your child's age, one or two proud moments from this year, and one gentle nudge for Father Christmas to mention, such as trying new vegetables or being kind to a little brother. Next, add the wishes on your child's Christmas list. Then pick the evening and time for the call, anywhere from 1 to 24 December, and pay online. The whole booking takes about three minutes. Then, at the time you picked, the phone rings.</p>
       <div class="tip"><b>Parent magic tip:</b> In the days before, drop a hint. "Someone from the North Pole phoned asking for you while you were at school…"</div>
     </div>
   </section>
@@ -244,18 +244,6 @@ footer{border-top:1px solid var(--line);padding-block:26px 40px;color:var(--snow
       <p class="small">Brothers and sisters get 25% off each extra call: use code <b>SIBLINGS25</b> at checkout.</p>
       <p style="margin-top:18px"><a class="big-btn" href="/book/">Book their call · £7.99</a></p>
       <p class="small">Book now, pay later · Fully refundable until 1 December · Secure payment by Stripe</p>
-    </div>
-    <div>
-      <h3 style="margin:0 0 6px">Not ready to book yet?</h3>
-      <p class="small" style="margin:0 0 14px">Just your email. We'll save your <b>£7.99 price until 30 November</b> and remind you before the best times go.</p>
-      <form id="wl" novalidate>
-        <div class="field full"><label for="email">Your email</label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></div>
-        <label class="consent" for="consent"><input id="consent" name="consent" type="checkbox" required> Yes, email me about Hello North Pole, including a reminder before the best call times go. I can unsubscribe any time.</label>
-        <input class="hp" type="text" name="website" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button type="submit" id="wlbtn">Save my place on the Nice List</button>
-        <p class="fine" id="wlerr" role="alert"></p>
-      </form>
-      <div class="thanks" id="thanks" role="status"><b>You're on the list!</b>Tinsel has written your name in the Switchboard book. Your £7.99 price is saved until 30 November, and we'll remind you before the best call times go.</div>
     </div>
   </section>
 
@@ -332,23 +320,6 @@ footer{border-top:1px solid var(--line);padding-block:26px 40px;color:var(--snow
   })();
 })();
 
-document.getElementById("wl").addEventListener("submit", function (e) {
-  e.preventDefault();
-  var form = this, email = document.getElementById("email"), err = document.getElementById("wlerr"), btn = document.getElementById("wlbtn");
-  err.textContent = "";
-  if (!email.value || email.value.indexOf("@") < 1) { email.focus(); email.setAttribute("aria-invalid", "true"); err.textContent = "Please enter your email address."; return; }
-  if (!document.getElementById("consent").checked) { err.textContent = "Please tick the box so we can email you when bookings open."; return; }
-  btn.disabled = true; btn.textContent = "Saving your place…";
-  fetch("https://hnp-waitlist.teethingissues.workers.dev", { method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: email.value, kids: "1", lang: "English",
-                           consent: true, website: document.getElementById("website").value }) })
-    .then(function (r) { return r.json(); })
-    .then(function (d) {
-      if (d.ok) { form.style.display = "none"; document.getElementById("thanks").style.display = "block"; }
-      else { err.textContent = d.error || "Something went wrong. Please try again."; btn.disabled = false; btn.textContent = "Save my place on the Nice List"; }
-    })
-    .catch(function () { err.textContent = "We couldn't reach the North Pole just now. Please try again in a minute."; btn.disabled = false; btn.textContent = "Save my place on the Nice List"; });
-});
 </script>
 <script>
 document.getElementById("hear").addEventListener("click", function () {
