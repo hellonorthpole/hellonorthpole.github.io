@@ -119,6 +119,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
           <div class="full"><label for="avoid">Anything he should avoid? <span class="opt">(optional)</span></label>
             <input id="avoid" placeholder="e.g. Please don't mention our dog, he passed away this year"></div>
         </div>
+        <p id="sib-wrap" style="margin:18px 0 0"><label class="consent" for="sibling"><input type="checkbox" id="sibling"> This call is for a brother or sister of a child already booked with us (25% off)</label></p>
       </div>
 
       <div class="card">
@@ -150,9 +151,9 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
       <a class="btn line" id="ics" href="#" download="father-christmas-call.ics">Add to my calendar</a>
     </div>
     <div id="pay-box" style="display:none;margin-top:22px;padding:18px;border:1.5px solid var(--gold);border-radius:14px;text-align:center">
-      <p class="lead" id="pay-title" style="margin:0 0 6px;color:var(--snow)"><b>One last step: pay £7.99 to confirm.</b></p>
-      <p class="small" id="pay-note" style="margin:0 0 14px">Pay now, or any time before 30 November. We'll hold your slot until then. Brothers and sisters: use code SIBLINGS25.</p>
-      <a class="btn gold" id="pay-btn" href="#">Pay £7.99 and confirm</a>
+      <p class="lead" id="pay-title" style="margin:0 0 6px;color:var(--snow)"><b>One last step: pay to confirm.</b></p>
+      <p class="small" id="pay-note" style="margin:0 0 14px">Pay now to confirm your call.</p>
+      <a class="btn gold" id="pay-btn" href="#">Pay and confirm</a>
     </div>
     <p id="paid-box" class="lead" style="display:none;margin-top:18px;color:var(--gold-soft);font-weight:700">✓ Paid. Your call is confirmed.</p>
     <p class="small" style="margin-top:18px">He rings from 020 3911 9303. Questions? Just reply to your booking email.</p>
@@ -163,7 +164,24 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
 (function () {
   var API = "https://hnp-booking.teethingissues.workers.dev";
   var DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], full = {}, day = null, slot = null;
-  var PAY = "https://buy.stripe.com/8x214o9MT0hcaJf8921RC01", qs = new URLSearchParams(location.search);
+  // 11 Nov 2026 (Ruby): early bird £7.99 until 23:59 on 30 November (UK), then £9.99. Sibling price (25% off) has its own Stripe
+  // product + links, so ONE creator code can still go on top (max 2 discounts). SIBLINGS25 only works on the main price.
+  var LINKS = { early: "https://buy.stripe.com/8x214o9MT0hcaJf8921RC01", full: "https://buy.stripe.com/eVq14obV11lg7x33SM1RC00",
+                sib_early: "https://buy.stripe.com/5kQeVe7EL6FA8B7gFy1RC02", sib_full: "https://buy.stripe.com/eVq3cw6AH8NIaJf3SM1RC03" };
+  var PENCE = { early: 799, full: 999, sib_early: 599, sib_full: 749 };
+  var qs = new URLSearchParams(location.search);
+  function isEarly() {   // ?np_today=2026-12-01 to test
+    var t = (qs.get("np_today") || "").match(/^(\d{4})-(\d{2})-(\d{2})$/), p = {};
+    if (t) { p.year = +t[1]; p.month = +t[2]; }
+    else new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", year: "numeric", month: "numeric" }).formatToParts(new Date()).forEach(function (x) { p[x.type] = +x.value; });
+    return p.year < 2026 || (p.year === 2026 && p.month <= 11);
+  }
+  function payFor(code, sibling) {   // -> {key, url, code}
+    var sib = sibling && code !== "FOUNDINGFAMILY", key = (sib ? "sib_" : "") + (isEarly() ? "early" : "full");
+    var c = (sib && code === "SIBLINGS25") ? "" : code;   // the sibling price already has the 25% off
+    return { key: key, pence: PENCE[key], url: LINKS[key], code: c };
+  }
+  window.hnpPayFor = payFor;
   var paidNow = qs.get("paid") || "", session = qs.get("session_id") || paidNow;
   function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -176,6 +194,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
       document.getElementById("pay-title").innerHTML = "<b>One last step: confirm your free call.</b>";
       document.getElementById("pay-note").textContent = "Your Founding Family code is already filled in, so it comes to £0. Please confirm before your call, or Father Christmas can't ring.";
       document.getElementById("pay-btn").textContent = "Confirm my free call";
+    } else {
+      var pf = payFor(codeVal(), document.getElementById("sibling").checked), amt = "£" + (pf.pence / 100).toFixed(2);
+      document.getElementById("pay-title").innerHTML = "<b>One last step: pay " + amt + " to confirm.</b>";
+      document.getElementById("pay-note").textContent = (pf.code ? "Your code is already filled in, so it comes off at checkout. " : "") +
+        (isEarly() ? "Pay now, or any time before 30 November. We'll hold your slot until then." : "Pay now to confirm your call.");
+      document.getElementById("pay-btn").textContent = "Pay " + (pf.code ? "" : amt + " ") + "and confirm";
     }
     document.getElementById("form-wrap").style.display = "none"; document.getElementById("done").style.display = "block"; window.scrollTo(0, 0);
   }
@@ -211,6 +235,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
     var ff = codeVal() === FF; month = ff ? 11 : 12; day = null; slot = null; cal.innerHTML = "";
     document.getElementById("times").innerHTML = ""; document.getElementById("picked").textContent = "";
     document.getElementById("ff-note").style.display = ff ? "block" : "none";
+    document.getElementById("sib-wrap").style.display = ff ? "none" : "block";
     document.getElementById("cal-hint").textContent = (ff ? "Founding Family calls run from 3 to 30 November." : "Calls run from 1 to 24 December.") + " Weekday calls are in the evening, after school. All times are UK time.";
     document.getElementById("cal-key").style.display = ff ? "none" : "block";
     cal.setAttribute("aria-label", ff ? "Choose a day in November" : "Choose a day in December");
@@ -275,7 +300,8 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
         var line = "Father Christmas will ring " + body.child_name + " on " + nice(day) + " at " + s.label + ".";
         store("hnp-booking", JSON.stringify({ line: line, paid: !!session }));
         try { if (window.fbq) fbq("track", "Lead"); } catch (e) {}
-        showDone(line, !!session, PAY + "?client_reference_id=" + encodeURIComponent(d.id) + "&prefilled_email=" + encodeURIComponent(body.email) + (codeVal() ? "&prefilled_promo_code=" + encodeURIComponent(codeVal()) : ""));
+        var pf = payFor(codeVal(), document.getElementById("sibling").checked);
+        showDone(line, !!session, pf.url + "?client_reference_id=" + encodeURIComponent(d.id) + "&prefilled_email=" + encodeURIComponent(body.email) + (pf.code ? "&prefilled_promo_code=" + encodeURIComponent(pf.code) : ""));
       })
       .catch(function () { err.textContent = "We couldn't reach the North Pole. Please check your connection and try again."; go.disabled = false; go.textContent = "Book the call"; });
   });
