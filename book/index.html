@@ -51,6 +51,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
 .time:hover{border-color:var(--gold)}
 .time[aria-pressed="true"]{background:var(--gold);color:#020C24;border-color:var(--gold);font-weight:700}
 .time:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
+.day:disabled{opacity:.3;cursor:not-allowed}
 .picked{margin-top:14px;font-weight:700;color:var(--gold-soft)}
 .consent{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--snow-dim);text-transform:none;letter-spacing:0;font-weight:400}
 .consent input{width:20px;height:20px;margin-top:3px;flex:none;accent-color:var(--gold)}
@@ -188,6 +189,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
   }
   function nice(d) { return new Date(Date.UTC(2026, month - 1, d)).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }); }
 
+  function ukNow() {   // 11 Nov 2026: never offer days or times that have passed (UK time, 1 hour notice)
+    var p = {}; new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", hourCycle: "h23" }).formatToParts(new Date()).forEach(function (x) { p[x.type] = +x.value; });
+    return { y: p.year, m: p.month, d: p.day, mins: p.hour * 60 + p.minute };
+  }
+  function isPastDay(d) { var n = ukNow(); return 2026 < n.y || (2026 === n.y && (month < n.m || (month === n.m && d < n.d))); }
+  function isPastSlot(d, id) { var n = ukNow(); if (isPastDay(d)) return true; if (!(2026 === n.y && month === n.m && d === n.d)) return false; return (+id.slice(11, 13)) * 60 + (+id.slice(14, 16)) < n.mins + 60; }
   var cal = document.getElementById("cal");
   function drawCal() {
     var ff = codeVal() === FF; month = ff ? 11 : 12; day = null; slot = null; cal.innerHTML = "";
@@ -202,6 +209,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
       var eve = month === 12 && d === 24, btn = document.createElement("button"); btn.type = "button"; btn.className = "day" + (eve ? " eve" : "");
       btn.setAttribute("aria-pressed", "false"); btn.setAttribute("aria-label", nice(d));
       btn.innerHTML = d + "<small>" + (eve ? "Xmas Eve" : DOW[new Date(Date.UTC(2026, month - 1, d)).getUTCDay()]) + "</small>";
+      if (isPastDay(d) || slotsFor(d).every(function (s) { return isPastSlot(d, s.id); })) { btn.disabled = true; btn.title = "This day has passed"; }
       btn.onclick = function () { day = d; slot = null; [].forEach.call(cal.querySelectorAll(".day"), function (x) { x.setAttribute("aria-pressed", x === btn ? "true" : "false"); }); drawTimes(); };
       cal.appendChild(btn);
     })(d);
@@ -216,6 +224,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
     slotsFor(day).forEach(function (s) {
       var b = document.createElement("button"); b.type = "button"; b.className = "time"; b.textContent = s.label; b.setAttribute("aria-pressed", "false");
       if (full[s.id]) { b.disabled = true; b.title = "Fully booked"; }
+      if (isPastSlot(day, s.id)) { b.disabled = true; b.title = "This time has passed"; }
       b.onclick = function () { slot = s.id; [].forEach.call(t.querySelectorAll(".time"), function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
         document.getElementById("picked").textContent = "Father Christmas will ring on " + nice(day) + " at " + s.label + "."; };
       t.appendChild(b);
