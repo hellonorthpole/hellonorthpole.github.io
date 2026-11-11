@@ -44,7 +44,9 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
 .day:hover{border-color:var(--gold)}
 .day[aria-pressed="true"]{background:var(--gold);color:#020C24;border-color:var(--gold)}
 .day[aria-pressed="true"] small{color:#020C24}
-.day.eve{border-color:var(--berry)}
+.day.eve{border-color:var(--berry);background:linear-gradient(180deg,rgba(196,40,60,.45),var(--night-3))}
+.day.eve small,.day.hot small{color:#FF8A96;font-weight:700}
+.day.hot{border-color:var(--berry);background:linear-gradient(180deg,rgba(196,40,60,.38),var(--night-3))}
 .blank{visibility:hidden}
 .times{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .time{appearance:none;border:1px solid var(--line);background:var(--night-3);color:var(--snow);border-radius:999px;padding:8px 14px;font:inherit;font-size:15px;cursor:pointer}
@@ -52,6 +54,14 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
 .time[aria-pressed="true"]{background:var(--gold);color:#020C24;border-color:var(--gold);font-weight:700}
 .time:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
 .day:disabled{opacity:.3;cursor:not-allowed}
+.day.hol{background:linear-gradient(180deg,rgba(216,170,80,.55),rgba(216,170,80,.18));border-color:#E8C27A}
+.day.hol small{color:#FFE2A8}
+.day.eve,.day.hot{background:linear-gradient(180deg,rgba(214,40,60,.75),rgba(214,40,60,.3));border-color:#FF6B7A}
+.day.eve small,.day.hot small{color:#FFD6DA;font-weight:700}
+.day.hol small{color:var(--gold-soft)}
+.day.pop small{color:var(--gold-soft);font-weight:700}
+.cal-key{margin:10px 0 18px;font-size:12.5px;color:var(--snow-faint)}
+.cal-key b{color:var(--gold-soft)}
 .picked{margin-top:14px;font-weight:700;color:var(--gold-soft)}
 .consent{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--snow-dim);text-transform:none;letter-spacing:0;font-weight:400}
 .consent input{width:20px;height:20px;margin-top:3px;flex:none;accent-color:var(--gold)}
@@ -84,6 +94,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
         <div class="step">Step 1</div>
         <h2>When should he ring?</h2>
         <p class="hint" id="cal-hint">Calls run from 1 to 24 December. Weekday calls are in the evening, after school. All times are UK time.</p>
+        <p class="cal-key" id="cal-key" style="display:none"><b>Gold days</b> are the school holidays and <b style="color:#FF8A96">red</b> is Christmas Eve, the evenings families want most. Book early to get your favourite time.</p>
         <p style="margin:0 0 16px"><label for="code">Got a Founding Family code? <span class="opt">(optional)</span></label><input id="code" autocomplete="off" style="max-width:260px;text-transform:uppercase"></p>
         <p class="picked" id="ff-note" style="display:none;margin:0 0 14px">Founding Family calls are in November, so pick any evening below. You're in the right place.</p>
         <div class="cal" id="cal" role="group" aria-label="Choose a day"></div>
@@ -201,24 +212,31 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
     document.getElementById("times").innerHTML = ""; document.getElementById("picked").textContent = "";
     document.getElementById("ff-note").style.display = ff ? "block" : "none";
     document.getElementById("cal-hint").textContent = (ff ? "Founding Family calls run from 3 to 30 November." : "Calls run from 1 to 24 December.") + " Weekday calls are in the evening, after school. All times are UK time.";
+    document.getElementById("cal-key").style.display = ff ? "none" : "block";
     cal.setAttribute("aria-label", ff ? "Choose a day in November" : "Choose a day in December");
     ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].forEach(function (n) { var e = document.createElement("div"); e.className = "dow"; e.textContent = n; cal.appendChild(e); });
     var first = ff ? 3 : 1, last = ff ? 30 : 24, lead = (new Date(Date.UTC(2026, month - 1, first)).getUTCDay() + 6) % 7;
     for (var i = 0; i < lead; i++) { var b = document.createElement("div"); b.className = "blank"; cal.appendChild(b); }
     for (var d = first; d <= last; d++) (function (d) {
-      var eve = month === 12 && d === 24, btn = document.createElement("button"); btn.type = "button"; btn.className = "day" + (eve ? " eve" : "");
+      var eve = month === 12 && d === 24, hol = month === 12 && d >= 19, btn = document.createElement("button"); btn.type = "button"; btn.className = "day" + (eve ? " eve" : "") + (hol ? " hol" : ""); btn.dataset.d = d;
       btn.setAttribute("aria-pressed", "false"); btn.setAttribute("aria-label", nice(d));
-      btn.innerHTML = d + "<small>" + (eve ? "Xmas Eve" : DOW[new Date(Date.UTC(2026, month - 1, d)).getUTCDay()]) + "</small>";
+      btn.innerHTML = d + "<small>" + (eve ? "Most wanted" : hol ? "Hols" : DOW[new Date(Date.UTC(2026, month - 1, d)).getUTCDay()]) + "</small>";
       if (isPastDay(d) || slotsFor(d).every(function (s) { return isPastSlot(d, s.id); })) { btn.disabled = true; btn.title = "This day has passed"; }
       btn.onclick = function () { day = d; slot = null; [].forEach.call(cal.querySelectorAll(".day"), function (x) { x.setAttribute("aria-pressed", x === btn ? "true" : "false"); }); drawTimes(); };
       cal.appendChild(btn);
     })(d);
+    markPopular();
   }
   document.getElementById("code").value = (qs.get("code") || "").toUpperCase();
   var lastFF = null;
   document.getElementById("code").addEventListener("input", function () { var f = codeVal() === FF; if (f !== lastFF) { lastFF = f; drawCal(); } });
   lastFF = codeVal() === FF; drawCal();
 
+  // 11 Nov 2026 (Ruby): show which days are popular. Only from REAL bookings: a day with 3+ fully booked times says "Popular".
+  function markPopular() {
+    var per = {}; Object.keys(full).forEach(function (k) { var m = +k.slice(5, 7), dd = +k.slice(8, 10); if (m === month) per[dd] = (per[dd] || 0) + 1; });
+    [].forEach.call(cal.querySelectorAll(".day"), function (b) { var dd = +b.dataset.d; if (b.disabled) return; var tot = slotsFor(dd).length; if (per[dd] >= tot / 2) { b.classList.add("hot"); b.querySelector("small").textContent = "Almost gone"; } else if (per[dd] >= 3) { b.classList.add("pop"); b.querySelector("small").textContent = "Popular"; } });
+  }
   function drawTimes() {
     var t = document.getElementById("times"); t.innerHTML = "";
     slotsFor(day).forEach(function (s) {
@@ -231,7 +249,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
     });
     document.getElementById("picked").textContent = "";
   }
-  fetch(API + "/slots").then(function (r) { return r.json(); }).then(function (d) { (d.full || []).forEach(function (k) { full[k] = 1; }); if (day) drawTimes(); }).catch(function () {});
+  fetch(API + "/slots").then(function (r) { return r.json(); }).then(function (d) { (d.full || []).forEach(function (k) { full[k] = 1; }); if (day) drawTimes(); markPopular(); }).catch(function () {});
 
   function v(id) { return document.getElementById(id).value.trim(); }
   document.getElementById("bk").addEventListener("submit", function (e) {
