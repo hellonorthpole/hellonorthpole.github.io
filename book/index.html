@@ -5,6 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book Your Call | Hello North Pole</title>
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" href="/favicon.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,7 +97,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
         <h2>When should he ring?</h2>
         <p class="hint" id="cal-hint">Calls run from 1 to 24 December. Weekday calls are in the evening, after school. All times are UK time.</p>
         <p class="cal-key" id="cal-key" style="display:none"><b>Gold days</b> are the school holidays and <b style="color:#FF8A96">red</b> is Christmas Eve, the evenings families want most. Book early to get your favourite time.</p>
-        <p style="margin:0 0 16px"><label for="code">Got a Founding Family code? <span class="opt">(optional)</span></label><input id="code" autocomplete="off" style="max-width:260px;text-transform:uppercase"></p>
+        <p style="margin:0 0 16px"><a href="#" id="code-toggle" class="small" style="color:var(--snow-dim)">Have a code?</a><span id="code-wrap" style="display:none"><label for="code">Got a Founding Family code? <span class="opt">(optional)</span></label><input id="code" autocomplete="off" style="max-width:260px;text-transform:uppercase"></span></p>
         <p class="picked" id="ff-note" style="display:none;margin:0 0 14px">Founding Family calls are in November, so pick any evening below. You're in the right place.</p>
         <div class="cal" id="cal" role="group" aria-label="Choose a day"></div>
         <div class="times" id="times" role="group" aria-label="Choose a time"></div>
@@ -256,6 +257,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
     markPopular();
   }
   document.getElementById("code").value = (qs.get("code") || "").toUpperCase();
+  (function () {   // 20 Nov 2026: code box hidden behind "Have a code?" so it doesn't send people off hunting for codes
+    var w = document.getElementById("code-wrap"), t = document.getElementById("code-toggle");
+    function open() { w.style.display = "block"; t.style.display = "none"; }
+    if (document.getElementById("code").value) open();
+    t.addEventListener("click", function (e) { e.preventDefault(); open(); document.getElementById("code").focus(); });
+  })();
   var lastFF = null;
   document.getElementById("code").addEventListener("input", function () { var f = codeVal() === FF; if (f !== lastFF) { lastFF = f; drawCal(); } });
   lastFF = codeVal() === FF; drawCal();
