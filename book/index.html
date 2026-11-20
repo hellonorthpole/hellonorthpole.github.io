@@ -134,9 +134,10 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
           <div class="full"><label for="email">Your email *</label><input id="email" type="email" autocomplete="email" required></div>
         </div>
         <input class="hp" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <p style="margin:18px 0 0"><label class="consent" for="consent"><input type="checkbox" id="consent"> I'm this child's parent or guardian. Hello North Pole can use these details to make the call, and will delete them after Christmas (<a href="/privacy/" target="_blank">privacy policy</a>).</label></p>
+        <p style="margin:18px 0 0"><label class="consent" for="consent"><input type="checkbox" id="consent"> <span>I'm this child's parent or guardian. Hello North Pole can use these details to make the call, and will delete them after Christmas (<a href="/privacy/" target="_blank">privacy policy</a>).</span></label></p>
       </div>
 
+      <p class="price-line" id="price-line" style="margin:24px 0 12px;text-align:center;color:var(--snow-dim);font-size:16px"><b style="color:var(--gold)" id="price-now">£7.99</b> <span id="price-when">per child until 30 November, then £9.99.</span><br><span class="small">Brothers and sisters 25% off. You pay on the next step.</span></p>
       <button class="go" id="go" type="submit">Book the call</button>
       <p class="err" id="err" role="alert"></p>
     </form>
@@ -183,6 +184,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
     return { key: key, pence: PENCE[key], url: LINKS[key], code: c };
   }
   window.hnpPayFor = payFor;
+  if (!isEarly()) { document.getElementById("price-now").textContent = "£9.99"; document.getElementById("price-when").textContent = "per child."; }   // 20 Nov 2026: price shown before booking
   var paidNow = qs.get("paid") || "", session = qs.get("session_id") || paidNow;
   function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
   function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
