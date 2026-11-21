@@ -96,7 +96,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
         <div class="step">Step 1</div>
         <h2>When should he ring?</h2>
         <p class="hint" id="cal-hint">Calls run from 1 to 24 December. Weekday calls are in the evening, after school. All times are UK time.</p>
-        <p class="cal-key" id="cal-key" style="display:none"><b>Gold days</b> are the school holidays and <b style="color:#FF8A96">red</b> is Christmas Eve, the evenings families want most. Book early to get your favourite time.</p>
+        <p class="cal-key" id="cal-key" style="display:none">🔥 <b>Popular days</b> are the school holidays and <b style="color:#FF8A96">red</b> is Christmas Eve, the evenings families want most. Book early to get your favourite time.</p>
         <p style="margin:0 0 16px"><a href="#" id="code-toggle" class="small" style="color:var(--snow-dim)">Have a code?</a><span id="code-wrap" style="display:none"><label for="code">Got a Founding Family code? <span class="opt">(optional)</span></label><input id="code" autocomplete="off" style="max-width:260px;text-transform:uppercase"></span></p>
         <p class="picked" id="ff-note" style="display:none;margin:0 0 14px">Founding Family calls are in November, so pick any evening below. You're in the right place.</p>
         <div class="cal" id="cal" role="group" aria-label="Choose a day"></div>
@@ -249,7 +249,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--gold);outline-of
     for (var d = first; d <= last; d++) (function (d) {
       var eve = month === 12 && d === 24, hol = month === 12 && d >= 19, btn = document.createElement("button"); btn.type = "button"; btn.className = "day" + (eve ? " eve" : "") + (hol ? " hol" : ""); btn.dataset.d = d;
       btn.setAttribute("aria-pressed", "false"); btn.setAttribute("aria-label", nice(d));
-      btn.innerHTML = d + "<small>" + (eve ? "Most wanted" : hol ? "Hols" : DOW[new Date(Date.UTC(2026, month - 1, d)).getUTCDay()]) + "</small>";
+      btn.innerHTML = d + "<small>" + (eve ? "Most wanted" : hol ? "🔥 Popular" : DOW[new Date(Date.UTC(2026, month - 1, d)).getUTCDay()]) + "</small>";
       if (isPastDay(d) || slotsFor(d).every(function (s) { return isPastSlot(d, s.id); })) { btn.disabled = true; btn.title = "This day has passed"; }
       btn.onclick = function () { day = d; slot = null; [].forEach.call(cal.querySelectorAll(".day"), function (x) { x.setAttribute("aria-pressed", x === btn ? "true" : "false"); }); drawTimes(); };
       cal.appendChild(btn);
